@@ -54,11 +54,16 @@ void ZSharpIR::sort(int a[], int size) {
     }
 }
 
+int ZSharpIR::analogOutput(){
+    return analogRead(_irPin);
+}
+
+
 // Read distance and compute it
-int ZSharpIR::distance() {
+float ZSharpIR::distance() {
 
     int ir_val[NB_SAMPLE];
-    int distanceMM;
+    float distanceMM;
     float current;
 
 
@@ -71,27 +76,36 @@ int ZSharpIR::distance() {
     sort(ir_val,NB_SAMPLE);
 
     
-    if (_model==1080)//GP2Y0A21YK0F
+    if (_model==A0)//Original SR calibration is ok
 		{
         //modified 1080 for GP2Y0A21YK instead
 
         // Different expressions required as the Photon has 12 bit ADCs vs 10 bit for Arduinos
         //puntualDistance = 27.728 * pow(voltFromRaw / 1000., -1.2045);
-          distanceMM =(int)( 27.728 * pow(map(ir_val[NB_SAMPLE / 2], 0, (1<<_Adcres)-1, 0, _refVoltage)/1000.0, -1.2045));
 
-
-    }   
-    else if (_model==GP2D12_24)//GP2D12_24
+          distanceMM =( 27.728 * pow(map(ir_val[NB_SAMPLE / 2], 0, (1<<_Adcres)-1, 0, _refVoltage)/1000.0, -1.2045);
+    } 
+    else if (_model==A3)//Original SR calibration is ok
 		{
-        
-        // Different expressions required as the Photon has 12 bit ADCs vs 10 bit for Arduinos
-          distanceMM =(int)( 24.65251 /(map(ir_val[NB_SAMPLE / 2], 0, (1<<_Adcres)-1, 0, _refVoltage)/1000.0-0.1065759));
+        //modified 1080 for GP2Y0A21YK instead
 
+        // Different expressions required as the Photon has 12 bit ADCs vs 10 bit for Arduinos
+        //puntualDistance = 27.728 * pow(voltFromRaw / 1000., -1.2045);
+          distanceMM =( 27.728 * pow(map(ir_val[NB_SAMPLE / 2], 0, (1<<_Adcres)-1, 0, _refVoltage)/1000.0, -1.2045);
+    }     
+
+    else if (_model==A2)//TODO calibrate this sensor
+		{
+        //modified 1080 for GP2Y0A21YK instead
+
+        // Different expressions required as the Photon has 12 bit ADCs vs 10 bit for Arduinos
+        //puntualDistance = 27.728 * pow(voltFromRaw / 1000., -1.2045);
+          distanceMM =( 27.728 * pow(map(ir_val[NB_SAMPLE / 2], 0, (1<<_Adcres)-1, 0, _refVoltage)/1000.0, -1.2045);
     } 
     
 
     
-    else if (_model==20150)//GP2Y0A02YK0F
+    else if (_model==A1) //TODO calibrate sensor
 	{
         //edited for GP2Y0A02YK instead
 
@@ -100,33 +114,19 @@ int ZSharpIR::distance() {
         
 
         // Different expressions required as the Photon has 12 bit ADCs vs 10 bit for Arduinos
-          distanceMM =(int)( 61.573 * pow(map(ir_val[NB_SAMPLE / 2], 0, (1<<_Adcres)-1, 0, _refVoltage)/1000.0, -1.1068));
-
-
-    } else if (_model==430)//GP2Y0A41SK0F
+          distanceMM =( 61.573 * pow(map(ir_val[NB_SAMPLE / 2], 0, (1<<_Adcres)-1, 0, _refVoltage)/1000.0, -1.1068);
+    } 
+    else if (_model==A4) //TODO calibrate sensor
 	{
+        //edited for GP2Y0A02YK instead
 
-        // Different expressions required as the Photon has 12 bit ADCs vs 10 bit for Arduinos
-          distanceMM =(int)( 120.8 * pow(map(ir_val[NB_SAMPLE / 2], 0, (1<<_Adcres)-1, 0, _refVoltage)/1000.0, -1.058));
-
-        
-    } else if (_model==100500)//GP2Y0A710K0F
-	{
+        // Previous formula used by  Dr. Marcal Casas-Cartagena
+        // puntualDistance=61.573*pow(voltFromRaw/1000, -1.1068);
         
 
-          current = map(ir_val[NB_SAMPLE / 2], 0, (1<<_Adcres)-1, 0, _refVoltage);
-
-        // use the inverse number of distance like in the datasheet (1/L)
-        // y = mx + b = 137500*x + 1125 
-        // x = (y - 1125) / 137500
         // Different expressions required as the Photon has 12 bit ADCs vs 10 bit for Arduinos
-        if (current < 1400 || current > 3300) {
-          //false data
-          distanceMM = 0;
-        } else {
-          distanceMM =(int)( 10.0 / (((current - 1125.0) / 1000.0) / 137.5));
-        }
-    }
+          distanceMM = ( 61.573 * pow(map(ir_val[NB_SAMPLE / 2], 0, (1<<_Adcres)-1, 0, _refVoltage)/1000.0, -1.1068);
+    } 
 
     return distanceMM;
 }
