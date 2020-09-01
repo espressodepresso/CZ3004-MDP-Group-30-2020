@@ -55,7 +55,17 @@ void ZSharpIR::sort(int a[], int size) {
 }
 
 int ZSharpIR::analogOutput(){
-    return analogRead(_irPin);
+    int ir_val[NB_SAMPLE];
+
+    for (int i=0; i<NB_SAMPLE; i++){
+        // Read analog value
+        ir_val[i] = analogRead(_irPin);
+    }
+    
+    // Sort it 
+    sort(ir_val,NB_SAMPLE);
+
+    return ir_val[NB_SAMPLE / 2];
 }
 
 

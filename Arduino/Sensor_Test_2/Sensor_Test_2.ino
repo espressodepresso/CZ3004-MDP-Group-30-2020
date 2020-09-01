@@ -22,6 +22,6 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  Serial.println(SharpIR;
+  Serial.println(lr2.analogOutput());
   delay(DELAY_REFRESH);
 }
