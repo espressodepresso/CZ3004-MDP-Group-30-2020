@@ -8,12 +8,7 @@
 #define lr2 A4
 
 #define DELAY_REFRESH     1000
-ZSharpIR SharpIR(sr1, A0);
-ZSharpIR SharpIR(sr2, A2);
-ZSharpIR SharpIR(sr3, A3);
-ZSharpIR SharpIR(sr4, A5);
-ZSharpIR SharpIR(lr1, A1);
-ZSharpIR SharpIR(lr2, A4);
+ZSharpIR looooong(lr2, A4);
 
 void setup() {
   Serial.begin(9600);
@@ -22,6 +17,6 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  Serial.println(lr2.analogOutput());
+  Serial.println(looooong.analogOutput());
   delay(DELAY_REFRESH);
 }

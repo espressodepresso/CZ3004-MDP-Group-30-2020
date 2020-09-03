@@ -28,7 +28,8 @@ class ZSharpIR
   public:
 
     ZSharpIR (int irPin, const uint32_t _sensorType);
-    int distance();
+    float distance();
+    int analogOutput();
 	static const uint32_t GP2Y0A41SK0F = 430 ;
 	static const uint32_t GP2Y0A21YK0F = 1080 ;
 	static const uint32_t GP2D12_24 = 1081 ;
