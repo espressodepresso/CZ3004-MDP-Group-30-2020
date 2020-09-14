@@ -1,22 +1,23 @@
 #include <ZSharpIR.h>
-
-#define sr1 A0
-#define sr2 A2
-#define sr3 A3
-#define sr4 A5
-#define lr1 A1
-#define lr2 A4
+#define FR A0
+#define LF A2
+#define RF A3
+#define LB A5
+#define FC A1
+#define RB A4
 
 #define DELAY_REFRESH     1000
 
 // ZSharpIR name (pin, model);
 
-ZSharpIR long1(lr1, A1);
-ZSharpIR long2(lr2, A4);
-ZSharpIR short1(sr1, A0);
-ZSharpIR short2(sr2, A2);
-ZSharpIR short3(sr3, A3);
-ZSharpIR short4(sr4, A5);
+ZSharpIR frontCenter(FC, A1);
+ZSharpIR rightBack(RB, A4);
+ZSharpIR frontRight(FR, A0);
+ZSharpIR leftFront(LF, A2);
+ZSharpIR rightFront(RF, A3);
+ZSharpIR leftBack(LB, A5);
+
+int sensorInfo[6];
 void setup() {
   Serial.begin(9600);
 
@@ -24,8 +25,17 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  Serial.println(short1.analogOutput());
-  Serial.println(short1.distance());
-  Serial.println();
+  getSensorInfo(sensorInfo);
+  Serial.print(sensorInfo[5]);
+  Serial.print(' ');
   delay(DELAY_REFRESH);
+}
+
+void getSensorInfo(int sensorInfo[]){
+  sensorInfo[0]=(frontCenter.distance());
+  sensorInfo[1]=(frontRight.distance());
+  sensorInfo[2]=(rightFront.distance());
+  sensorInfo[3]=(rightBack.distance());
+  sensorInfo[4]=(leftFront.distance());
+  sensorInfo[5]=(leftBack.distance());
 }
