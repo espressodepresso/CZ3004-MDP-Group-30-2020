@@ -70,7 +70,7 @@ void loop() {
   c = commandQueue.dequeue();
   delay(100);
     
-  switch(c.command){
+  switch(inputCmd[0]){
     case 'W':
     {
       goForward();
@@ -116,34 +116,16 @@ void loop() {
 }
 
 void readCommands(){
-   while(Serial.available()){
-    char charIn = (char)Serial.read();
-      if (charIn == '|'){
-        inputCmd += charIn;
-        struct cmd c;
-        c.command = inputCmd[0];
-        c.arg = inputCmd[1];
-        inputCmd="";
-        delay(50);
-        commandQueue.enqueue(c); 
-        Serial.println(c.command);   
-      }else{
-        inputCmd += charIn;
-        Serial.println(inputCmd);
-      }
-      if (charIn == '\n'){
-        struct cmd c;
-        inputCmd += charIn;
-        c.command = inputCmd[0];
-        c.arg = inputCmd[1];
-        inputCmd="";
-        commandQueue.enqueue(c);      
-      }else{
-        inputCmd += charIn;
-      }
-      Serial.println(inputCmd);
-      delay(100);
+  char newChar;
+  inputCmd="";
+  while (Serial.available()){
+    newChar = Serial.read();
+    inputCmd.concat(newChar);
+    if (newChar == '\n'){
+      break;
+    }
   }
+  Serial.print(inputCmd);
 }
 
 
@@ -166,7 +148,7 @@ void rotateRight(int degree){
   Serial.println("Rotate right");
 }
 void calibration(){
-  Serial.print("Calibrate");
+  Serial.println("Calibrate");
 }
 
 
