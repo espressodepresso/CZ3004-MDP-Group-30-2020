@@ -4,12 +4,12 @@
 #include "PinChangeInt.h"
 #include <ArduinoQueue.h>
 
-#define FR A0
-#define LF A2
-#define RF A3
-#define LB A5
-#define FC A1
-#define RB A4
+#define RB A1
+#define LB A0
+#define LF A3
+#define FM A4
+#define FL A2
+#define FR A5 
 #define R_encoder 11
 #define L_encoder 3
 #define RPM_L 70
@@ -39,12 +39,12 @@ String inputCmd ="";
 
 PID myPIDR(&inputR, &outputR, &setpointR, kpR, kiR, kdR, DIRECT);
 PID myPIDL(&inputL, &outputL, &setpointL, kpL, kiL, kdL, DIRECT);
-ZSharpIR frontCenter(FC, A1);
-ZSharpIR rightBack(RB, A4);
-ZSharpIR frontRight(FR, A0);
-ZSharpIR leftFront(LF, A2);
-ZSharpIR rightFront(RF, A3);
-ZSharpIR leftBack(LB, A5);
+ZSharpIR rightBack(RB, A1);
+ZSharpIR leftBack(LB, A0);
+ZSharpIR leftFront(LF, A3);
+ZSharpIR frontMiddle(FM, A4);
+ZSharpIR frontLeft(FL, A2);
+ZSharpIR frontRight(FR, A5);
 ArduinoQueue<cmd> commandQueue(5);
 
 int count = 1;
@@ -153,9 +153,9 @@ void calibration(){
 
 
 void getSensorInfo(int sensorInfo[]){
-  sensorInfo[0]=(frontCenter.distance());
-  sensorInfo[1]=(frontRight.distance());
-  sensorInfo[2]=(rightFront.distance());
+  sensorInfo[0]=(frontLeft.distance());
+  sensorInfo[1]=(frontMiddle.distance());
+  sensorInfo[2]=(frontRight.distance());
   sensorInfo[3]=(rightBack.distance());
   sensorInfo[4]=(leftFront.distance());
   sensorInfo[5]=(leftBack.distance());
