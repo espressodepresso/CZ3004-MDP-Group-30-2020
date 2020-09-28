@@ -69,7 +69,7 @@ void setup() {
   setpointL = speedToRPML(SPEED);
   myPIDR.SetMode(AUTOMATIC);
   myPIDL.SetMode(AUTOMATIC);
-  md.setSpeeds(SPEED,-SPEED); //L,R
+//  md.setSpeeds(SPEED,-SPEED); //L,R
   startTimeR = millis();
   startTimeL = millis();
 }
@@ -84,12 +84,11 @@ void loop() {
     case 'W':
     {
       moveForward(10);
-      getSensorInfo(sensorInfo);
       for (int i=0;i<6;++i){
         Serial.print(sensorInfo[i]);
-        Serial.print(' ');
+        Serial.print(',');
       }
-      Serial.print('|');
+      Serial.println("");
       break;
     }
     case 'A':
@@ -98,9 +97,9 @@ void loop() {
       getSensorInfo(sensorInfo);
       for (int i=0;i<6;++i){
         Serial.print(sensorInfo[i]);
-        Serial.print(' ');
+        Serial.print(',');
       }
-      Serial.print('|');
+      Serial.println("");
       break;
     }
     case 'D':
@@ -109,9 +108,9 @@ void loop() {
       getSensorInfo(sensorInfo);
       for (int i=0;i<6;++i){
         Serial.print(sensorInfo[i]);
-        Serial.print(' ');
+        Serial.print(',');
       }
-      Serial.print('|');
+      Serial.println("");
       break;
     }
     case 'L':
@@ -132,9 +131,9 @@ void loop() {
       getSensorInfo(sensorInfo);
       for (int i=0;i<6;++i){
         Serial.print(sensorInfo[i]);
-        Serial.print(' ');
+        Serial.print(',');
       }
-      Serial.print('|');
+      Serial.println("");
       break;
     }
   }
