@@ -84,16 +84,34 @@ void loop() {
     case 'W':
     {
       moveForward(10);
+      getSensorInfo(sensorInfo);
+      for (int i=0;i<6;++i){
+        Serial.print(sensorInfo[i]);
+        Serial.print(' ');
+      }
+      Serial.print('|');
       break;
     }
     case 'A':
     {
       turnL(90);
+      getSensorInfo(sensorInfo);
+      for (int i=0;i<6;++i){
+        Serial.print(sensorInfo[i]);
+        Serial.print(' ');
+      }
+      Serial.print('|');
       break;
     }
     case 'D':
     {
       turnR(90);
+      getSensorInfo(sensorInfo);
+      for (int i=0;i<6;++i){
+        Serial.print(sensorInfo[i]);
+        Serial.print(' ');
+      }
+      Serial.print('|');
       break;
     }
     case 'L':
