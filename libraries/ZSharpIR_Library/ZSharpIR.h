@@ -14,7 +14,7 @@
 #ifndef SharpIR_h
 #define SharpIR_h
 
-#define NB_SAMPLE 21
+#define NB_SAMPLE 11
 
 #include "Arduino.h"
 
