@@ -1,7 +1,7 @@
 #include <ZSharpIR.h>
 #include <PID_v1.h>
-#include "DualVNH5019MotorShield.h"
-#include "PinChangeInt.h"
+#include <PinChangeInt.h>
+#include <DualVNH5019MotorShield.h>
 #include <ArduinoQueue.h>
 
 #define RB A1
@@ -12,24 +12,32 @@
 #define FR A5 
 #define R_encoder 11
 #define L_encoder 3
-#define RPM_L 70
-#define RPM_R 74
+//#define RPM_L 54
+//#define RPM_R 57
+#define SPEED 200
+#define TICK_PER_CM 29.83
+#define TICK_PER_DEG 4.3
+#define COUNT 50
 
 DualVNH5019MotorShield md;
 
-int right_encoder_val = 0, left_encoder_val = 0;
+volatile unsigned int right_encoder_val = 0, left_encoder_val = 0;
 int rEncStart = 0, lEncStart = 0;
 int sensorInfo[6];
 int degree;
 
-const unsigned int COUNT = 20;
 unsigned long nowTime = 0; //updated every loop()
 unsigned long startTimeR = 0, startTimeL = 0; 
-double inputR, outputR, setpointR;
-double inputL, outputL, setpointL;
-double kpR = 1, kiR = 0, kdR = 0;
-double kpL = 1.04, kiL = 0, kdL = 0.12;
-
+unsigned long timeTakenR = 0, timeTakenL = 0;
+//double rpmR = 0, rpmL = 0;
+double inputR = 0, outputR = 0, setpointR;
+double inputL = 0, outputL = 0, setpointL;
+double kpR = 1, kiR = 0.001, kdR = 0;
+//value for RPMR = 74, RPML = 70
+//double kpL = 1.04, kiL = 0, kdL = 0.12;
+//double kpL = 1.06, kiL = 0, kdL = 0.12;
+double kpL = 1.62, kiL = 0.002, kdL = 0.004;
+int deg; int dist;
 
 struct cmd{
   char command;
@@ -51,17 +59,19 @@ int count = 1;
 
 void setup() {
   // put your setup code here, to run once:
-  Serial.begin(9600);
+  Serial.begin(115200);
   md.init();
-  startTimeR = millis();
-  startTimeL = millis();
   PCintPort::attachInterrupt(R_encoder, RightEncoderInc, RISING);
   PCintPort::attachInterrupt(L_encoder, LeftEncoderInc, RISING);
 
-  setpointR = RPM_R;
-  setpointL = RPM_L;
+
+  setpointR = speedToRPMR(SPEED);
+  setpointL = speedToRPML(SPEED);
   myPIDR.SetMode(AUTOMATIC);
   myPIDL.SetMode(AUTOMATIC);
+  md.setSpeeds(SPEED,-SPEED); //L,R
+  startTimeR = millis();
+  startTimeL = millis();
 }
 
 void loop() {
@@ -73,27 +83,25 @@ void loop() {
   switch(inputCmd[0]){
     case 'W':
     {
-      goForward();
+      moveForward(10);
       break;
     }
     case 'A':
     {
-      turnLeft();
+      turnL(90);
       break;
     }
     case 'D':
     {
-      turnRight();
+      turnR(90);
       break;
     }
     case 'L':
     {
-      rotateLeft(degree);
       break;
     }
     case 'R':
     {
-      rotateRight(degree);
       break;
     }
     case 'C':
@@ -129,104 +137,180 @@ void readCommands(){
 }
 
 
-
-void goForward(){
-  Serial.println("forward");
-}
-void turnLeft(){
-  Serial.println("left");
-}
-void turnRight(){
-  Serial.println("right");
-}
-void rotateLeft(int degree){
-  Serial.print(degree);
-  Serial.println("Rotate Left");
-}
-void rotateRight(int degree){
-  Serial.print(degree);
-  Serial.println("Rotate right");
-}
 void calibration(){
   Serial.println("Calibrate");
 }
 
 
+// SENSOR STUFF
 void getSensorInfo(int sensorInfo[]){
   sensorInfo[0]=(frontLeft.distance());
   sensorInfo[1]=(frontMiddle.distance());
   sensorInfo[2]=(frontRight.distance());
-  sensorInfo[3]=(rightBack.distance());
-  sensorInfo[4]=(leftFront.distance());
-  sensorInfo[5]=(leftBack.distance());
+  sensorInfo[3]=(leftFront.distance());
+  sensorInfo[4]=(leftBack.distance());
+  sensorInfo[5]=(rightBack.distance());
 }
 
-double getRPM(long ST, char r){ //measured RPM
-  double rpmR, rpmL, diviR, diviL;
-  int startEncR, curEncR, startEncL, curEncL;
-  
-  startEncR = right_encoder_val;
-  startEncL = left_encoder_val;
-  Serial.print("startEncL");
-  Serial.println(startEncL);
-  //Serial.println(ST);
-  while(1){
-    if((millis()-ST)==1000){
-    curEncR = right_encoder_val;
-    curEncL = left_encoder_val;
-    //Serial.print("curEnc");
-    //Serial.println(curEnc);
 
-    //rpmR
-    diviR =(curEncR-startEncR)/562.25;
-    rpmR = diviR*60;
-    Serial.print("rpmR");
-    Serial.println(rpmR);
-    
-    //rpmL
-    diviL =(curEncL-startEncL)/562.25;
-    rpmL = diviL*60;
-    Serial.print("rpmL");
-    Serial.println(rpmL);
-
-    //return value
-    if('r' == 'R') return rpmR;
-    else return rpmL;
-    }
-  } 
-  delay(1000);
-
-}
-
+// RPM STUFF
 double rpmToSpeedR(double rpm_r){
   double speedR = (rpm_r + 5.0856)/0.3123;
   return speedR;
 }
+
+double speedToRPMR(double speedR){
+  double rpmR = (0.3123 * speedR) - 5.0856;
+  return rpmR;
+}
+
 
 double rpmToSpeedL(double rpm_l){
   double speedL = (rpm_l + 7.7982)/0.3087;
   return speedL;
 }
 
+double speedToRPML(double speedL){
+  double rpmL = (0.3087 * speedL) - 7.7982;
+  return rpmL;
+}
+
+double calcRPMR(){
+  rEncStart = right_encoder_val;
+  while(right_encoder_val - rEncStart <= COUNT){}
+  timeTakenR = millis() - startTimeR;
+  startTimeR = millis();
+  //Serial.print("timetakenR"); Serial.println(timeTakenR);
+  double rpmR = 2*(((COUNT/(double)timeTakenR) * 60000) / 562.25);
+  return rpmR;
+}
+
+double calcRPML(){
+  lEncStart = left_encoder_val;
+  while(left_encoder_val - lEncStart <= COUNT){}
+  timeTakenL = millis() - startTimeL;
+  startTimeL = millis();
+  //Serial.print("timetakenL"); Serial.println(timeTakenL);
+  double rpmL = 2*(((COUNT/(double)timeTakenL) * 60000) / 562.25);
+  return rpmL;
+}
+
 
 void RightEncoderInc(){
-  unsigned long timeTaken;
   right_encoder_val++;
-  if (right_encoder_val - rEncStart == COUNT){
-    timeTaken = startTimeR - nowTime;
-    inputR = ((COUNT/timeTaken) * 1000 * 60) / 562.25;
+  /*if (right_encoder_val - rEncStart == COUNT){
+    timeTakenR = nowTime - startTimeR;
     rEncStart += COUNT;
     startTimeR = nowTime;
-    }
- }
+    }*/
+  }
   
 void LeftEncoderInc(){
-  unsigned long timeTaken;
   left_encoder_val++;
-  if (left_encoder_val - lEncStart == COUNT){
-    timeTaken = startTimeL - nowTime;
-    inputL = ((COUNT/timeTaken) * 1000 * 60) / 562.25;
+  /*if (left_encoder_val - lEncStart == COUNT){
+    timeTakenL = nowTime - startTimeL;
     lEncStart += COUNT;
     startTimeL = nowTime;
-    }
+  }*/
+}
+
+
+
+//MOVEMENT
+void moveForward(int dist){
+  double target_ticks = TICK_PER_CM * dist; 
+
+  right_encoder_val = left_encoder_val = 0;
+
+  md.setSpeeds(SPEED, -SPEED);
+
+  while(right_encoder_val < target_ticks){
+    inputL = calcRPML();
+    inputR = calcRPMR();
+    //Serial.print("inputR: "); Serial.println(inputR);
+    //Serial.print("inputL: "); Serial.println(inputL);
+    //Serial.println(right_encoder_val);
+    myPIDR.Compute();
+    myPIDL.Compute();  
+    //Serial.print("outputR: "); Serial.println(outputR);
+    //Serial.print("outputL: "); Serial.println(outputL);
+    md.setM2Speed(-rpmToSpeedR(inputR + outputR));
+    md.setM1Speed(rpmToSpeedL(inputL + outputL));
+  }
+  md.setBrakes(400,400);
+  delay(1000);
+}
+
+//dist in cm
+void moveBack(int dist){
+  double target_ticks = TICK_PER_CM * dist; 
+
+  right_encoder_val = left_encoder_val = 0;
+
+  md.setSpeeds(-SPEED, SPEED);
+
+  while(right_encoder_val < target_ticks){
+    inputL = calcRPML();
+    inputR = calcRPMR();
+    //Serial.print("inputR: "); Serial.println(inputR);
+    //Serial.print("inputL: "); Serial.println(inputL);
+    //Serial.println(right_encoder_val);
+    myPIDR.Compute();
+    myPIDL.Compute();  
+    //Serial.print("outputR: "); Serial.println(outputR);
+    //Serial.print("outputL: "); Serial.println(outputL);
+    md.setM2Speed(rpmToSpeedR(inputR + outputR));
+    md.setM1Speed(-rpmToSpeedL(inputL + outputL));
+  }
+  md.setBrakes(400,400);
+  delay(1000);
+}
+
+void turnL(int deg){
+  double target_ticks = TICK_PER_DEG * deg; 
+  Serial.println(target_ticks);
+
+  right_encoder_val = left_encoder_val = 0;
+
+  md.setSpeeds(SPEED, SPEED);
+
+  while(right_encoder_val < target_ticks){
+    inputL = calcRPML();
+    inputR = calcRPMR();
+    //Serial.print("inputR: "); Serial.println(inputR);
+    //Serial.print("inputL: "); Serial.println(inputL);
+    //Serial.println(right_encoder_val);
+    myPIDR.Compute();
+    myPIDL.Compute();  
+    //Serial.print("outputR: "); Serial.println(outputR);
+    //Serial.print("outputL: "); Serial.println(outputL);
+    md.setM2Speed(rpmToSpeedR(inputR + outputR));
+    md.setM1Speed(rpmToSpeedL(inputL + outputL));
+  }
+  md.setBrakes(400,400);
+  delay(1000);
+}
+
+void turnR(int deg){
+  double target_ticks = TICK_PER_DEG * deg; 
+
+  right_encoder_val = left_encoder_val = 0;
+
+  md.setSpeeds(-SPEED, -SPEED);
+
+  while(right_encoder_val < target_ticks){
+    inputL = calcRPML();
+    inputR = calcRPMR();
+    //Serial.print("inputR: "); Serial.println(inputR);
+    //Serial.print("inputL: "); Serial.println(inputL);
+    //Serial.println(right_encoder_val);
+    myPIDR.Compute();
+    myPIDL.Compute();  
+    //Serial.print("outputR: "); Serial.println(outputR);
+    //Serial.print("outputL: "); Serial.println(outputL);
+    md.setM2Speed(-rpmToSpeedR(inputR + outputR));
+    md.setM1Speed(-rpmToSpeedL(inputL + outputL));
+  }
+  md.setBrakes(400,400);
+  delay(1000);
 }
