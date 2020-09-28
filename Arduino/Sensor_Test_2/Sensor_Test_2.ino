@@ -47,16 +47,16 @@ void getSensorInfo(int sensorInfo[]){
   sensorInfo[0]=(frontLeft.distance());
   sensorInfo[1]=(frontMiddle.distance());
   sensorInfo[2]=(frontRight.distance());
-  sensorInfo[3]=(rightBack.distance());
-  sensorInfo[4]=(leftFront.distance());
-  sensorInfo[5]=(leftBack.distance());
+  sensorInfo[3]=(leftFront.distance());
+  sensorInfo[4]=(leftBack.distance());
+  sensorInfo[5]=(rightBack.distance());
 }
 
 void getRawInfo(int rawVoltage[]){
   rawVoltage[0]=(frontLeft.analogOutput());
   rawVoltage[1]=(frontMiddle.analogOutput());
   rawVoltage[2]=(frontRight.analogOutput());
-  rawVoltage[3]=(rightBack.analogOutput());
-  rawVoltage[4]=(leftFront.analogOutput());
-  rawVoltage[5]=(leftBack.analogOutput());
+  rawVoltage[3]=(leftFront.analogOutput());
+  rawVoltage[4]=(leftBack.analogOutput());
+  rawVoltage[5]=(rightBack.analogOutput());
 }

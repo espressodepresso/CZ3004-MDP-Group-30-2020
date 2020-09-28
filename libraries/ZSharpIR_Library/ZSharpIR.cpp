@@ -86,67 +86,58 @@ float ZSharpIR::distance() {
     sort(ir_val,NB_SAMPLE);
 
     
-    if (_model==A0)
+    if (_model==A0)//LB
 		{
         //modified 1080 for GP2Y0A21YK instead
 
         // Different expressions required as the Photon has 12 bit ADCs vs 10 bit for Arduinos
         //puntualDistance = 27.728 * pow(voltFromRaw / 1000., -1.2045);
+        distanceMM =( 27.728 * pow(map(ir_val[NB_SAMPLE / 2], 0, (1<<_Adcres)-1, 0, _refVoltage)/1000.0, -1.2045));
+        //distanceMM = 91987*pow(ir_val[NB_SAMPLE / 2],-1.114);
 
-          distanceMM =( 27.728 * pow(map(ir_val[NB_SAMPLE / 2], 0, (1<<_Adcres)-1, 0, _refVoltage)/1000.0, -1.2045));
-          if (distanceMM >50 ){
-              distanceMM = 50;
-          }
     } 
-    else if (_model==A2)//TODO calibrate this sensor
+    else if (_model==A2)//FL
 		{
         //modified 1080 for GP2Y0A21YK instead
 
         // Different expressions required as the Photon has 12 bit ADCs vs 10 bit for Arduinos
         //puntualDistance = 27.728 * pow(voltFromRaw / 1000., -1.2045);
-          distanceMM =( 27.728 * pow(map(ir_val[NB_SAMPLE / 2], 0, (1<<_Adcres)-1, 0, _refVoltage)/1000.0, -1.2045));
-        if (distanceMM >50 ){
-              distanceMM = 50;
-          }
+        distanceMM =( 27.728 * pow(map(ir_val[NB_SAMPLE / 2], 0, (1<<_Adcres)-1, 0, _refVoltage)/1000.0, -1.2045));
+        //distanceMM = 208128*pow(ir_val[NB_SAMPLE / 2],-1.278);
     }     
 
-    else if (_model==A3)
+    else if (_model==A3)//LF
 		{
         //modified 1080 for GP2Y0A21YK instead
 
         // Different expressions required as the Photon has 12 bit ADCs vs 10 bit for Arduinos
         //puntualDistance = 27.728 * pow(voltFromRaw / 1000., -1.2045);
-          distanceMM =( 27.728 * pow(map(ir_val[NB_SAMPLE / 2], 0, (1<<_Adcres)-1, 0, _refVoltage)/1000.0, -1.2045));
-          if (distanceMM >50 ){
-              distanceMM = 50;
-          }
+        distanceMM =( 27.728 * pow(map(ir_val[NB_SAMPLE / 2], 0, (1<<_Adcres)-1, 0, _refVoltage)/1000.0, -1.2045));
+        //distanceMM = 102099*pow(ir_val[NB_SAMPLE / 2],-1.132);
     } 
-    else if (_model==A4)
+    else if (_model==A4)//FM
 		{
         //modified 1080 for GP2Y0A21YK instead
 
         // Different expressions required as the Photon has 12 bit ADCs vs 10 bit for Arduinos
         //puntualDistance = 27.728 * pow(voltFromRaw / 1000., -1.2045);
-          distanceMM =( 27.728 * pow(map(ir_val[NB_SAMPLE / 2], 0, (1<<_Adcres)-1, 0, _refVoltage)/1000.0, -1.2045));
-          if (distanceMM >50 ){
-              distanceMM = 50;
-          }
+        distanceMM =( 27.728 * pow(map(ir_val[NB_SAMPLE / 2], 0, (1<<_Adcres)-1, 0, _refVoltage)/1000.0, -1.2045))+1;
+        //distanceMM = 413670*pow(ir_val[NB_SAMPLE / 2],-1.422);
     } 
-    else if (_model==A5)
+    else if (_model==A5)//FR
 		{
         //modified 1080 for GP2Y0A21YK instead
 
         // Different expressions required as the Photon has 12 bit ADCs vs 10 bit for Arduinos
         //puntualDistance = 27.728 * pow(voltFromRaw / 1000., -1.2045);
-          distanceMM =( 27.728 * pow(map(ir_val[NB_SAMPLE / 2], 0, (1<<_Adcres)-1, 0, _refVoltage)/1000.0, -1.2045));
-          if (distanceMM >50 ){
-              distanceMM = 50;
-          }
+        //distanceMM =( 27.728 * pow(map(ir_val[NB_SAMPLE / 2], 0, (1<<_Adcres)-1, 0, _refVoltage)/1000.0, -1.2045));
+        //taken at 6.1V
+        distanceMM = 7512*pow(ir_val[NB_SAMPLE / 2],-1.066);    
     } 
     
 
     
-    else if (_model==A1) //TODO calibrate sensor
+    else if (_model==A1) //RB
 	{
         //edited for GP2Y0A02YK instead
 
@@ -155,10 +146,7 @@ float ZSharpIR::distance() {
         
         // Different expressions required as the Photon has 12 bit ADCs vs 10 bit for Arduinos
         distanceMM =( 61.573 * pow(map(ir_val[NB_SAMPLE / 2], 0, (1<<_Adcres)-1, 0, _refVoltage)/1000.0, -1.1068));
-        if (distanceMM >80 ){
-              distanceMM = 80;
-          }
-        //distanceMM = (136065*pow(ir_val[NB_SAMPLE/2],-1.04));
+        //distanceMM = (853318*pow(ir_val[NB_SAMPLE/2],-1.35));
     } 
 
     return distanceMM;
