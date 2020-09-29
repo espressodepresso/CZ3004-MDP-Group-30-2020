@@ -2,7 +2,6 @@
 #include <PID_v1.h>
 #include <PinChangeInt.h>
 #include <DualVNH5019MotorShield.h>
-#include <ArduinoQueue.h>
 
 #define RB A1
 #define LB A0
@@ -53,7 +52,6 @@ ZSharpIR leftFront(LF, A3);
 ZSharpIR frontMiddle(FM, A4);
 ZSharpIR frontLeft(FL, A2);
 ZSharpIR frontRight(FR, A5);
-ArduinoQueue<cmd> commandQueue(5);
 
 int count = 1;
 
@@ -75,69 +73,49 @@ void setup() {
 }
 
 void loop() {
-  readCommands();
-  struct cmd c;
-  c = commandQueue.dequeue();
-  delay(100);
-    
-  switch(inputCmd[0]){
-    case 'W':
-    {
-      moveForward(10);
-      for (int i=0;i<6;++i){
-        Serial.print(sensorInfo[i]);
-        Serial.print(',');
+  inputCmd = Serial.readString();
+  while(inputCmd != ""){
+    switch(inputCmd[0]){
+      case 'W':
+      {
+        moveForward(10);
+        sensorToRpi();
+        break;
       }
-      Serial.println("");
-      break;
-    }
-    case 'A':
-    {
-      turnL(90);
-      getSensorInfo(sensorInfo);
-      for (int i=0;i<6;++i){
-        Serial.print(sensorInfo[i]);
-        Serial.print(',');
+      case 'A':
+      {
+        turnL(90);
+        sensorToRpi();
+        break;
       }
-      Serial.println("");
-      break;
-    }
-    case 'D':
-    {
-      turnR(90);
-      getSensorInfo(sensorInfo);
-      for (int i=0;i<6;++i){
-        Serial.print(sensorInfo[i]);
-        Serial.print(',');
+      case 'D':
+      {
+        turnR(90);
+        sensorToRpi();
+        break;
       }
-      Serial.println("");
-      break;
-    }
-    case 'L':
-    {
-      break;
-    }
-    case 'R':
-    {
-      break;
-    }
-    case 'C':
-    {
-      calibration();
-      break;
-    }
-    case 'V':
-    {
-      getSensorInfo(sensorInfo);
-      for (int i=0;i<6;++i){
-        Serial.print(sensorInfo[i]);
-        Serial.print(',');
+      case 'L':
+      {
+        break;
       }
-      Serial.println("");
-      break;
+      case 'R':
+      {
+        break;
+      }
+      case 'C':
+      {
+        calibration();
+        break;
+      }
+      case 'V':
+      {
+        sensorToRpi();
+        break;
+      }
     }
-  }
-  delay(200);
+    delay(50);
+    inputCmd.remove(0,1);
+    }
 }
 
 void readCommands(){
@@ -153,6 +131,16 @@ void readCommands(){
   Serial.print(inputCmd);
 }
 
+
+void sensorToRpi(){
+  getSensorInfo(sensorInfo);
+  String toRpi = "[" + String(sensorInfo[0]);
+  for (int i=1;i<6;++i){
+    String sensorInfo = String(sensorInfo[i]);
+    toRpi = toRpi + "," + sensorInfo[i];
+  }
+  toRpi =toRpi + "]";
+}
 
 void calibration(){
   Serial.println("Calibrate");
