@@ -118,20 +118,6 @@ void loop() {
     }
 }
 
-void readCommands(){
-  char newChar;
-  inputCmd="";
-  while (Serial.available()){
-    newChar = Serial.read();
-    inputCmd.concat(newChar);
-    if (newChar == '\n'){
-      break;
-    }
-  }
-  Serial.print(inputCmd);
-}
-
-
 void sensorToRpi(){
   getSensorInfo(sensorInfo);
   String toRpi = "[" + String(sensorInfo[0]);
