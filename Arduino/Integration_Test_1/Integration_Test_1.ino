@@ -72,8 +72,11 @@ void setup() {
 }
 
 void loop() {
-  inputCmd = Serial.readString();
-  while(inputCmd != ""){
+  if (Serial.available()){
+    inputCmd = Serial.readString();
+  }
+  Serial.println(inputCmd);
+  while (inputCmd != ""){
     switch(inputCmd[0]){
       case 'W':
       {
@@ -107,9 +110,12 @@ void loop() {
         break;
       }
     }
-    delay(50);
+    Serial.println(inputCmd);
     inputCmd.remove(0,1);
+    Serial.println(inputCmd);
+    Serial.println("loop");
     }
+    
 }
 
 void sensorToRpi(){
@@ -130,7 +136,7 @@ void calibration(){
   float fl = sensorInfo[3]; //front left
   float bl = sensorInfo[4]; //back left
   float diff = fl - bl; //neg = turn r, pos = turn l
-  Serial.print("initial: "); Serial.println(diff);
+  //Serial.print("initial: "); Serial.println(diff);
   while(1){
     if(diff >= 1 && diff <= 8){ //positive error, turn L
       calL();
@@ -138,7 +144,7 @@ void calibration(){
       fl = sensorInfo[3]; 
       bl = sensorInfo[4]; 
       diff = fl - bl;
-      Serial.print("+ :"); Serial.println(diff);
+      //Serial.print("+ :"); Serial.println(diff);
     }
     else if(diff <= -1 && diff >= -8){ //negative error, turn R
       calR();
@@ -146,7 +152,7 @@ void calibration(){
       fl = sensorInfo[3]; 
       bl = sensorInfo[4]; 
       diff = fl - bl;
-      Serial.print("- :"); Serial.println(diff);
+      //Serial.print("- :"); Serial.println(diff);
     }
     else{
       return;
