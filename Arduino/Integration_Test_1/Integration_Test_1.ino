@@ -40,7 +40,7 @@ struct cmd{
   char command;
   int arg;
 };
-String inputCmd ="";
+String inputCmd;
 
 PID myPIDR(&inputR, &outputR, &setpointR, kpR, kiR, kdR, DIRECT);
 PID myPIDL(&inputL, &outputL, &setpointL, kpL, kiL, kdL, DIRECT);
@@ -72,31 +72,30 @@ void setup() {
 }
 
 void loop() {
-  if (Serial.available()){
-    inputCmd = Serial.readString();
-  }
-  Serial.println(inputCmd);
-  while (inputCmd != ""){
+
+  inputCmd = Serial.readString();
+  while (!(inputCmd == NULL)){
+    //Serial.println("loop");
     switch(inputCmd[0]){
       case 'W':
       {
         moveForward(10);
-        sensorToRpi();
         calibration();
+        Serial.println("movement done");
         break;
       }
       case 'L':
       {
         turnLR();
-        sensorToRpi();
         calibration();
+        Serial.println("movement done");
         break;
       }
       case 'R':
       {
         turnRR();
-        sensorToRpi();
         calibration();
+        Serial.println("movement done");
         break;
       }
       case 'C':
@@ -110,12 +109,9 @@ void loop() {
         break;
       }
     }
-    Serial.println(inputCmd);
-    inputCmd.remove(0,1);
-    Serial.println(inputCmd);
-    Serial.println("loop");
-    }
-    
+    inputCmd.remove(0,1);   
+    delay(100); 
+    }    
 }
 
 void sensorToRpi(){
@@ -130,7 +126,7 @@ void sensorToRpi(){
 }
 
 void calibration(){
-  Serial.println("Calibrate");
+  //Serial.println("Calibrate");
   md.setSpeeds(0,0); //stop before calibrating
   getSensorInfo(sensorInfo);
   float fl = sensorInfo[3]; //front left
