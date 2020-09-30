@@ -22,7 +22,7 @@ DualVNH5019MotorShield md;
 
 volatile unsigned int right_encoder_val = 0, left_encoder_val = 0;
 int rEncStart = 0, lEncStart = 0;
-int sensorInfo[6];
+float sensorInfo[6];
 int degree;
 
 unsigned long nowTime = 0; //updated every loop()
@@ -127,7 +127,7 @@ void calibration(){
   Serial.println("Calibrate");
   md.setSpeeds(0,0); //stop before calibrating
   getSensorInfo(sensorInfo);
-  float f1 = sensorInfo[3]; //front left
+  float fl = sensorInfo[3]; //front left
   float bl = sensorInfo[4]; //back left
   float diff = fl - bl; //neg = turn r, pos = turn l
   Serial.print("initial: "); Serial.println(diff);
@@ -135,7 +135,7 @@ void calibration(){
     if(diff >= 1 && diff <= 8){ //positive error, turn L
       calL();
       getSensorInfo(sensorInfo);
-      f1 = sensorInfo[3]; 
+      fl = sensorInfo[3]; 
       bl = sensorInfo[4]; 
       diff = fl - bl;
       Serial.print("+ :"); Serial.println(diff);
@@ -143,7 +143,7 @@ void calibration(){
     else if(diff <= -1 && diff >= -8){ //negative error, turn R
       calR();
       getSensorInfo(sensorInfo);
-      f1 = sensorInfo[3]; 
+      fl = sensorInfo[3]; 
       bl = sensorInfo[4]; 
       diff = fl - bl;
       Serial.print("- :"); Serial.println(diff);
@@ -156,7 +156,7 @@ void calibration(){
 
 
 // SENSOR STUFF
-void getSensorInfo(int sensorInfo[]){
+void getSensorInfo(float sensorInfo[]){
   sensorInfo[0]=(frontLeft.distance());
   sensorInfo[1]=(frontMiddle.distance());
   sensorInfo[2]=(frontRight.distance());
