@@ -33,9 +33,7 @@ double inputR = 0, outputR = 0, setpointR;
 double inputL = 0, outputL = 0, setpointL;
 double kpR = 1, kiR = 0.001, kdR = 0;
 //value for RPMR = 74, RPML = 70
-//double kpL = 1.04, kiL = 0, kdL = 0.12;
-//double kpL = 1.06, kiL = 0, kdL = 0.12;
-double kpL = 1.62, kiL = 0.002, kdL = 0.004;
+double kpL = 1.2, kiL = 0.002, kdL = 0.004;
 int deg; int dist;
 
 struct cmd{
@@ -64,7 +62,8 @@ void setup() {
 
 
   setpointR = speedToRPMR(SPEED);
-  setpointL = speedToRPML(SPEED);
+  //setpointL = speedToRPML(SPEED);
+  setpointL = 53; //54.3;
   myPIDR.SetMode(AUTOMATIC);
   myPIDL.SetMode(AUTOMATIC);
 //  md.setSpeeds(SPEED,-SPEED); //L,R
@@ -78,28 +77,23 @@ void loop() {
     switch(inputCmd[0]){
       case 'W':
       {
+        //calibration();
         moveForward(10);
-        sensorToRpi();
-        break;
-      }
-      case 'A':
-      {
-        turnL(90);
-        sensorToRpi();
-        break;
-      }
-      case 'D':
-      {
-        turnR(90);
         sensorToRpi();
         break;
       }
       case 'L':
       {
+        //calibration();
+        turnL(90);
+        sensorToRpi();
         break;
       }
       case 'R':
       {
+        //calibration();
+        turnR(90);
+        sensorToRpi();
         break;
       }
       case 'C':
@@ -109,7 +103,7 @@ void loop() {
       }
       case 'V':
       {
-        sensorToRpi();
+        sensorToRpi();       
         break;
       }
     }
@@ -122,14 +116,42 @@ void sensorToRpi(){
   getSensorInfo(sensorInfo);
   String toRpi = "[" + String(sensorInfo[0]);
   for (int i=1;i<6;++i){
-    String sensorInfo = String(sensorInfo[i]);
-    toRpi = toRpi + "," + sensorInfo[i];
+    String sensorInfoString = String(sensorInfo[i]);
+    toRpi = toRpi + "," + sensorInfoString;
   }
   toRpi =toRpi + "]";
+  Serial.println(toRpi);
 }
 
 void calibration(){
   Serial.println("Calibrate");
+  md.setSpeeds(0,0); //stop before calibrating
+  getSensorInfo(sensorInfo);
+  float f1 = sensorInfo[3]; //front left
+  float bl = sensorInfo[4]; //back left
+  float diff = fl - bl; //neg = turn r, pos = turn l
+  Serial.print("initial: "); Serial.println(diff);
+  while(1){
+    if(diff >= 1 && diff <= 8){ //positive error, turn L
+      calL();
+      getSensorInfo(sensorInfo);
+      f1 = sensorInfo[3]; 
+      bl = sensorInfo[4]; 
+      diff = fl - bl;
+      Serial.print("+ :"); Serial.println(diff);
+    }
+    else if(diff <= -1 && diff >= -8){ //negative error, turn R
+      calR();
+      getSensorInfo(sensorInfo);
+      f1 = sensorInfo[3]; 
+      bl = sensorInfo[4]; 
+      diff = fl - bl;
+      Serial.print("- :"); Serial.println(diff);
+    }
+    else{
+      return;
+    }
+  }
 }
 
 
@@ -171,7 +193,6 @@ double calcRPMR(){
   while(right_encoder_val - rEncStart <= COUNT){}
   timeTakenR = millis() - startTimeR;
   startTimeR = millis();
-  //Serial.print("timetakenR"); Serial.println(timeTakenR);
   double rpmR = 2*(((COUNT/(double)timeTakenR) * 60000) / 562.25);
   return rpmR;
 }
@@ -181,7 +202,6 @@ double calcRPML(){
   while(left_encoder_val - lEncStart <= COUNT){}
   timeTakenL = millis() - startTimeL;
   startTimeL = millis();
-  //Serial.print("timetakenL"); Serial.println(timeTakenL);
   double rpmL = 2*(((COUNT/(double)timeTakenL) * 60000) / 562.25);
   return rpmL;
 }
@@ -189,21 +209,11 @@ double calcRPML(){
 
 void RightEncoderInc(){
   right_encoder_val++;
-  /*if (right_encoder_val - rEncStart == COUNT){
-    timeTakenR = nowTime - startTimeR;
-    rEncStart += COUNT;
-    startTimeR = nowTime;
-    }*/
   }
   
 void LeftEncoderInc(){
   left_encoder_val++;
-  /*if (left_encoder_val - lEncStart == COUNT){
-    timeTakenL = nowTime - startTimeL;
-    lEncStart += COUNT;
-    startTimeL = nowTime;
-  }*/
-}
+  }
 
 
 
@@ -218,18 +228,13 @@ void moveForward(int dist){
   while(right_encoder_val < target_ticks){
     inputL = calcRPML();
     inputR = calcRPMR();
-    //Serial.print("inputR: "); Serial.println(inputR);
-    //Serial.print("inputL: "); Serial.println(inputL);
-    //Serial.println(right_encoder_val);
     myPIDR.Compute();
     myPIDL.Compute();  
-    //Serial.print("outputR: "); Serial.println(outputR);
-    //Serial.print("outputL: "); Serial.println(outputL);
     md.setM2Speed(-rpmToSpeedR(inputR + outputR));
     md.setM1Speed(rpmToSpeedL(inputL + outputL));
   }
   md.setBrakes(400,400);
-  delay(1000);
+  //delay(1000);
 }
 
 //dist in cm
@@ -243,23 +248,17 @@ void moveBack(int dist){
   while(right_encoder_val < target_ticks){
     inputL = calcRPML();
     inputR = calcRPMR();
-    //Serial.print("inputR: "); Serial.println(inputR);
-    //Serial.print("inputL: "); Serial.println(inputL);
-    //Serial.println(right_encoder_val);
     myPIDR.Compute();
     myPIDL.Compute();  
-    //Serial.print("outputR: "); Serial.println(outputR);
-    //Serial.print("outputL: "); Serial.println(outputL);
     md.setM2Speed(rpmToSpeedR(inputR + outputR));
     md.setM1Speed(-rpmToSpeedL(inputL + outputL));
   }
   md.setBrakes(400,400);
-  delay(1000);
+  //delay(1000);
 }
 
 void turnL(int deg){
-  double target_ticks = TICK_PER_DEG * deg; 
-  Serial.println(target_ticks);
+  double target_ticks = TICK_PER_DEG * deg;
 
   right_encoder_val = left_encoder_val = 0;
 
@@ -268,18 +267,13 @@ void turnL(int deg){
   while(right_encoder_val < target_ticks){
     inputL = calcRPML();
     inputR = calcRPMR();
-    //Serial.print("inputR: "); Serial.println(inputR);
-    //Serial.print("inputL: "); Serial.println(inputL);
-    //Serial.println(right_encoder_val);
     myPIDR.Compute();
     myPIDL.Compute();  
-    //Serial.print("outputR: "); Serial.println(outputR);
-    //Serial.print("outputL: "); Serial.println(outputL);
     md.setM2Speed(rpmToSpeedR(inputR + outputR));
     md.setM1Speed(rpmToSpeedL(inputL + outputL));
   }
   md.setBrakes(400,400);
-  delay(1000);
+  //delay(1000);
 }
 
 void turnR(int deg){
@@ -292,16 +286,27 @@ void turnR(int deg){
   while(right_encoder_val < target_ticks){
     inputL = calcRPML();
     inputR = calcRPMR();
-    //Serial.print("inputR: "); Serial.println(inputR);
-    //Serial.print("inputL: "); Serial.println(inputL);
-    //Serial.println(right_encoder_val);
     myPIDR.Compute();
     myPIDL.Compute();  
-    //Serial.print("outputR: "); Serial.println(outputR);
-    //Serial.print("outputL: "); Serial.println(outputL);
     md.setM2Speed(-rpmToSpeedR(inputR + outputR));
     md.setM1Speed(-rpmToSpeedL(inputL + outputL));
   }
   md.setBrakes(400,400);
-  delay(1000);
+  //delay(1000);
+}
+
+void calL(){
+  double target_ticks = 1;
+  right_encoder_val = left_encoder_val = 0;
+  md.setSpeeds(SPEED,SPEED);
+  while(right_encoder_val < target_ticks){}
+  md.setBrakes(400,400);
+}
+
+void calR(){
+  double target_ticks = 1;
+  right_encoder_val = left_encoder_val = 0;
+  md.setSpeeds(-SPEED,-SPEED);
+  while(right_encoder_val < target_ticks){}
+  md.setBrakes(400,400);
 }

@@ -18,7 +18,7 @@ ZSharpIR frontLeft(FL, A2);
 ZSharpIR frontRight(FR, A5);
 
 
-int sensorInfo[6];
+float sensorInfo[6];
 int rawVoltage[6];
 void setup() {
   Serial.begin(9600);
@@ -43,7 +43,7 @@ void loop() {
   delay(DELAY_REFRESH);
 }
 
-void getSensorInfo(int sensorInfo[]){
+void getSensorInfo(float sensorInfo[]){
   sensorInfo[0]=(frontLeft.distance());
   sensorInfo[1]=(frontMiddle.distance());
   sensorInfo[2]=(frontRight.distance());
