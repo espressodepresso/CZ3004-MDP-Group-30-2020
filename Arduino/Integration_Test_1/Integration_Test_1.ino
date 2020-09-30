@@ -14,7 +14,7 @@
 //#define RPM_L 54
 //#define RPM_R 57
 #define SPEED 200
-#define TICK_PER_CM 29.83
+#define TICK_PER_CM 25//29.83
 #define TICK_PER_DEG 4.3
 #define COUNT 50
 
@@ -77,23 +77,23 @@ void loop() {
     switch(inputCmd[0]){
       case 'W':
       {
-        //calibration();
         moveForward(10);
         sensorToRpi();
+        calibration();
         break;
       }
       case 'L':
       {
-        //calibration();
-        turnL(90);
+        turnLR();
         sensorToRpi();
+        calibration();
         break;
       }
       case 'R':
       {
-        //calibration();
-        turnR(90);
+        turnRR();
         sensorToRpi();
+        calibration();
         break;
       }
       case 'C':
@@ -218,6 +218,13 @@ void LeftEncoderInc(){
 
 
 //MOVEMENT
+void startPID(){
+  inputL = calcRPML();
+  inputR = calcRPMR();
+  myPIDL.Compute();
+  myPIDR.Compute();
+}
+
 void moveForward(int dist){
   double target_ticks = TICK_PER_CM * dist; 
 
@@ -226,12 +233,9 @@ void moveForward(int dist){
   md.setSpeeds(SPEED, -SPEED);
 
   while(right_encoder_val < target_ticks){
-    inputL = calcRPML();
-    inputR = calcRPMR();
-    myPIDR.Compute();
-    myPIDL.Compute();  
-    md.setM2Speed(-rpmToSpeedR(inputR + outputR));
+    startPID();
     md.setM1Speed(rpmToSpeedL(inputL + outputL));
+    md.setM2Speed(-rpmToSpeedR(inputR + outputR));
   }
   md.setBrakes(400,400);
   //delay(1000);
@@ -246,12 +250,9 @@ void moveBack(int dist){
   md.setSpeeds(-SPEED, SPEED);
 
   while(right_encoder_val < target_ticks){
-    inputL = calcRPML();
-    inputR = calcRPMR();
-    myPIDR.Compute();
-    myPIDL.Compute();  
-    md.setM2Speed(rpmToSpeedR(inputR + outputR));
+    startPID();  
     md.setM1Speed(-rpmToSpeedL(inputL + outputL));
+    md.setM2Speed(rpmToSpeedR(inputR + outputR));
   }
   md.setBrakes(400,400);
   //delay(1000);
@@ -265,12 +266,9 @@ void turnL(int deg){
   md.setSpeeds(SPEED, SPEED);
 
   while(right_encoder_val < target_ticks){
-    inputL = calcRPML();
-    inputR = calcRPMR();
-    myPIDR.Compute();
-    myPIDL.Compute();  
-    md.setM2Speed(rpmToSpeedR(inputR + outputR));
+    startPID(); 
     md.setM1Speed(rpmToSpeedL(inputL + outputL));
+    md.setM2Speed(rpmToSpeedR(inputR + outputR));
   }
   md.setBrakes(400,400);
   //delay(1000);
@@ -283,13 +281,10 @@ void turnR(int deg){
 
   md.setSpeeds(-SPEED, -SPEED);
 
-  while(right_encoder_val < target_ticks){
-    inputL = calcRPML();
-    inputR = calcRPMR();
-    myPIDR.Compute();
-    myPIDL.Compute();  
-    md.setM2Speed(-rpmToSpeedR(inputR + outputR));
+  while(right_encoder_val < target_ticks){ 
+    startPID();
     md.setM1Speed(-rpmToSpeedL(inputL + outputL));
+    md.setM2Speed(-rpmToSpeedR(inputR + outputR));
   }
   md.setBrakes(400,400);
   //delay(1000);
@@ -308,5 +303,35 @@ void calR(){
   right_encoder_val = left_encoder_val = 0;
   md.setSpeeds(-SPEED,-SPEED);
   while(right_encoder_val < target_ticks){}
+  md.setBrakes(400,400);
+}
+
+void turnRR(){
+  double target_ticks = 371; 
+
+  right_encoder_val = left_encoder_val = 0;
+
+  md.setSpeeds(-SPEED, -SPEED);
+
+  while(right_encoder_val < target_ticks){
+    startPID(); 
+    md.setM1Speed(-rpmToSpeedL(inputL + outputL));
+    md.setM2Speed(-rpmToSpeedR(inputR + outputR));
+  }
+  md.setBrakes(400,400);
+}
+
+void turnLR(){
+  double target_ticks = 375;
+
+  right_encoder_val = left_encoder_val = 0;
+
+  md.setSpeeds(SPEED, SPEED);
+
+  while(right_encoder_val < target_ticks){
+    startPID(); 
+    md.setM1Speed(rpmToSpeedL(inputL + outputL));
+    md.setM2Speed(rpmToSpeedR(inputR + outputR));
+  }
   md.setBrakes(400,400);
 }
