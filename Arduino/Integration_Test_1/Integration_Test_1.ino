@@ -23,6 +23,7 @@ DualVNH5019MotorShield md;
 volatile unsigned int right_encoder_val = 0, left_encoder_val = 0;
 int rEncStart = 0, lEncStart = 0;
 float sensorInfo[6];
+int blockDist[6];
 int degree;
 
 unsigned long nowTime = 0; //updated every loop()
@@ -80,33 +81,37 @@ void loop() {
       case 'W':
       {
         moveForward(10);
-        calibration();
+        calibrationLR();
         Serial.println("movement done");
         break;
       }
       case 'L':
       {
         turnLR();
-        calibration();
+        calibrationLR();
         Serial.println("movement done");
         break;
       }
       case 'R':
       {
         turnRR();
-        calibration();
+        calibrationLR();
         Serial.println("movement done");
         break;
       }
       case 'C':
       {
-        calibration();
+        calibrationLR();
         break;
       }
       case 'V':
       {
         sensorToRpi();       
         break;
+      }
+      case 'X':
+      {
+        actualDist();
       }
     }
     inputCmd.remove(0,1);   
@@ -116,16 +121,32 @@ void loop() {
 
 void sensorToRpi(){
   getSensorInfo(sensorInfo);
-  String toRpi = "[" + String(sensorInfo[0]);
-  for (int i=1;i<6;++i){
-    String sensorInfoString = String(sensorInfo[i]);
+  
+  for (int i=0;i<6;++i){
+    blockDist[i] = sensorInfo[i]/10;
+  }
+  
+  String toRpi = "[" + String(blockDist[0]);
+  for (int j=1;j<6;++j){
+    String sensorInfoString = String(blockDist[j]);
     toRpi = toRpi + "," + sensorInfoString;
   }
   toRpi =toRpi + "]";
   Serial.println(toRpi);
 }
 
-void calibration(){
+void actualDist(){
+  getSensorInfo(sensorInfo);  
+  String toRpi = "[" + String(sensorInfo[0]);
+  for (int j=1;j<6;++j){
+    String sensorInfoString = String(sensorInfo[j]);
+    toRpi = toRpi + "," + sensorInfoString;
+  }
+  toRpi =toRpi + "]";
+  Serial.println(toRpi);
+}
+
+void calibrationLR(){
   //Serial.println("Calibrate");
   md.setSpeeds(0,0); //stop before calibrating
   getSensorInfo(sensorInfo);
@@ -154,6 +175,13 @@ void calibration(){
       return;
     }
   }
+}
+
+void calibrationFB(){
+  getSensorInfo(sensorInfo);
+  float closestSensor = min(sensorInfo[0],sensorInfo[1]);
+  Serial.println(closestSensor);
+  
 }
 
 
