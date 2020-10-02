@@ -34,7 +34,7 @@ double inputR = 0, outputR = 0, setpointR;
 double inputL = 0, outputL = 0, setpointL;
 double kpR = 1, kiR = 0.001, kdR = 0;
 //value for RPMR = 74, RPML = 70
-double kpL = 1.2, kiL = 0.002, kdL = 0.004;
+double kpL = 1.05, kiL = 0.0022, kdL = 0.004;
 int deg; int dist;
 
 struct cmd{
@@ -82,6 +82,7 @@ void loop() {
       {
         moveForward(10);
         calibrationLR();
+        calibrationFB();
         Serial.println("movement done");
         break;
       }
@@ -104,6 +105,11 @@ void loop() {
         calibrationLR();
         break;
       }
+      case'F':
+      {
+        calibrationFB();
+        break;
+      }
       case 'V':
       {
         sensorToRpi();       
@@ -112,6 +118,18 @@ void loop() {
       case 'X':
       {
         actualDist();
+        break;
+      }
+      case 'S':
+      {
+        startCal();
+        Serial.print("calibration done");
+        break;
+      }
+      case 'K':
+      {
+        turnLH();
+        break;
       }
     }
     inputCmd.remove(0,1);   
@@ -123,7 +141,41 @@ void sensorToRpi(){
   getSensorInfo(sensorInfo);
   
   for (int i=0;i<6;++i){
-    blockDist[i] = sensorInfo[i]/10;
+
+    //L sensors return 0 blocks for dist <20
+    if(i==3||i==4){
+      sensorInfo[i]=sensorInfo[i]-5;
+      if((sensorInfo[i]>5)&&(sensorInfo[i]<12)){
+        blockDist[i]=0;
+      }
+      else{
+          blockDist[i] = sensorInfo[i]/10;
+        }
+    }
+    //tldr round to closest block
+    else if(sensorInfo[i]>10){
+      if(int(sensorInfo[i])%10>6){
+        blockDist[i] = sensorInfo[i]/10 + 1;
+      }
+      else{
+        blockDist[i] = sensorInfo[i]/10;
+      }
+    }
+
+    //Long range sensor
+    if(i==5){
+      sensorInfo[i]=sensorInfo[i]-5;
+      blockDist[i] = sensorInfo[i]/10;
+    }
+
+    if(i!=5){
+      if (blockDist[i]>3){
+        blockDist[i]=3;
+      }
+    }
+    else if(blockDist[i]>5){
+      blockDist[i]=5;
+    }
   }
   
   String toRpi = "[" + String(blockDist[0]);
@@ -178,10 +230,30 @@ void calibrationLR(){
 }
 
 void calibrationFB(){
+  md.setSpeeds(0,0); //stop before calibrating
   getSensorInfo(sensorInfo);
   float closestSensor = min(sensorInfo[0],sensorInfo[1]);
-  Serial.println(closestSensor);
-  
+  closestSensor = min(closestSensor, sensorInfo[2]);
+  //Serial.println(closestSensor);
+  while(1){
+    if(closestSensor <= 8){ //too close, move back to 8cm mark
+      calB();
+      getSensorInfo(sensorInfo);
+      closestSensor = min(sensorInfo[0],sensorInfo[1]);
+      closestSensor = min(closestSensor, sensorInfo[2]);  
+      //Serial.print("B :"); Serial.println(closestSensor);
+    }
+    else if(closestSensor <= 13 && closestSensor > 8.5){ //too far, move front to 8cm mark
+      calF();
+      getSensorInfo(sensorInfo);
+      closestSensor = min(sensorInfo[0],sensorInfo[1]);
+      closestSensor = min(closestSensor, sensorInfo[2]);  
+      //Serial.print("F :"); Serial.println(closestSensor);
+    }
+    else{
+      return;
+    }
+  }  
 }
 
 
@@ -320,6 +392,49 @@ void turnR(int deg){
   //delay(1000);
 }
 
+void turnRR(){
+  double target_ticks = 368; 
+
+  right_encoder_val = left_encoder_val = 0;
+
+  md.setSpeeds(-SPEED, -SPEED);
+
+  while(right_encoder_val < target_ticks){
+    startPID(); 
+    md.setM1Speed(-rpmToSpeedL(inputL + outputL));
+    md.setM2Speed(-rpmToSpeedR(inputR + outputR));
+  }
+  md.setBrakes(400,400);
+}
+
+void turnLR(){
+  double target_ticks = 369;
+
+  right_encoder_val = left_encoder_val = 0;
+
+  md.setSpeeds(SPEED, SPEED);
+
+  while(right_encoder_val < target_ticks){
+    startPID(); 
+    md.setM1Speed(rpmToSpeedL(inputL + outputL));
+    md.setM2Speed(rpmToSpeedR(inputR + outputR));
+  }
+  md.setBrakes(400,400);
+}
+
+void turnLH(){
+  double target_ticks = 750;
+  right_encoder_val = 0;
+  md.setSpeeds(SPEED,SPEED);
+  while(right_encoder_val < target_ticks){
+    startPID();
+    md.setM1Speed(rpmToSpeedL(inputL + outputL));
+    md.setM2Speed(rpmToSpeedR(inputR + outputR));
+  }
+  md.setBrakes(400,400);
+}
+
+// CALIBRATION STUFF
 void calL(){
   double target_ticks = 1;
   right_encoder_val = left_encoder_val = 0;
@@ -336,32 +451,30 @@ void calR(){
   md.setBrakes(400,400);
 }
 
-void turnRR(){
-  double target_ticks = 371; 
-
-  right_encoder_val = left_encoder_val = 0;
-
-  md.setSpeeds(-SPEED, -SPEED);
-
-  while(right_encoder_val < target_ticks){
-    startPID(); 
-    md.setM1Speed(-rpmToSpeedL(inputL + outputL));
-    md.setM2Speed(-rpmToSpeedR(inputR + outputR));
-  }
+void calF(){
+  double target_ticks = 1;
+  right_encoder_val = 0;
+  md.setSpeeds(SPEED,-SPEED);
+  while(right_encoder_val < target_ticks){}
   md.setBrakes(400,400);
 }
 
-void turnLR(){
-  double target_ticks = 375;
-
-  right_encoder_val = left_encoder_val = 0;
-
-  md.setSpeeds(SPEED, SPEED);
-
-  while(right_encoder_val < target_ticks){
-    startPID(); 
-    md.setM1Speed(rpmToSpeedL(inputL + outputL));
-    md.setM2Speed(rpmToSpeedR(inputR + outputR));
-  }
+void calB(){
+  double target_ticks = 1;
+  right_encoder_val = 0;
+  md.setSpeeds(-SPEED, SPEED);
+  while(right_encoder_val < target_ticks){}
   md.setBrakes(400,400);
+}
+
+void startCal(){
+  turnLH(); //turn 180
+  calibrationFB();
+  //sCalFB(); //calibrate behind
+  turnRR();
+  calibrationLR();
+  calibrationFB();
+  //sCalFB(); //calibrate left wall
+  turnRR(); //face front
+  calibrationLR(); //calibrate left wall
 }
