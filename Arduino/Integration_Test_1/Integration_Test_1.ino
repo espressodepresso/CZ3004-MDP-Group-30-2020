@@ -1,3 +1,4 @@
+
 #include <ZSharpIR.h>
 #include <PID_v1.h>
 #include <PinChangeInt.h>
@@ -123,7 +124,7 @@ void loop() {
       case 'S':
       {
         startCal();
-        Serial.print("calibration done");
+        Serial.println("calibration done");
         break;
       }
       case 'K':
