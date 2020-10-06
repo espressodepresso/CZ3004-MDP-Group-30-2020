@@ -14,9 +14,9 @@
 #define L_encoder 3
 //#define RPM_L 54
 //#define RPM_R 57
-#define SPEED 200
-#define TICK_PER_CM 25//29.83
-#define TICK_PER_DEG 4.3
+#define SPEED 250
+#define TICK_PER_CM 20.96//20//25//29.83
+#define TICK_PER_DEG 4//.3
 #define COUNT 50
 
 DualVNH5019MotorShield md;
@@ -33,9 +33,11 @@ unsigned long timeTakenR = 0, timeTakenL = 0;
 //double rpmR = 0, rpmL = 0;
 double inputR = 0, outputR = 0, setpointR;
 double inputL = 0, outputL = 0, setpointL;
-double kpR = 1, kiR = 0.001, kdR = 0;
+//double kpR = 1, kiR = 0.001, kdR = 0;
+double kpR = 1, kiR = 0, kdR = 0;
 //value for RPMR = 74, RPML = 70
-double kpL = 1.05, kiL = 0.0022, kdL = 0.004;
+//double kpL = 1.05, kiL = 0.0022, kdL = 0.004;
+double kpL = 1.15, kiL = 0, kdL = 0;
 int deg; int dist;
 
 struct cmd{
@@ -63,9 +65,9 @@ void setup() {
   PCintPort::attachInterrupt(L_encoder, LeftEncoderInc, RISING);
 
 
-  setpointR = speedToRPMR(SPEED);
+  setpointR = 70;
   //setpointL = speedToRPML(SPEED);
-  setpointL = 53; //54.3;
+  setpointL = 70; //54.3;
   myPIDR.SetMode(AUTOMATIC);
   myPIDL.SetMode(AUTOMATIC);
 //  md.setSpeeds(SPEED,-SPEED); //L,R
@@ -81,7 +83,8 @@ void loop() {
     switch(inputCmd[0]){
       case 'W':
       {
-        moveForward(10);
+        moveOne();
+        //moveForward(10);
         calibrationLR();
         calibrationFB();
         Serial.println("movement done");
@@ -140,9 +143,8 @@ void loop() {
 
 void sensorToRpi(){
   getSensorInfo(sensorInfo);
-  
   for (int i=0;i<6;++i){
-
+    
     //L sensors return 0 blocks for dist <20
     if(i==3||i==4){
       sensorInfo[i]=sensorInfo[i]-5;
@@ -153,21 +155,25 @@ void sensorToRpi(){
           blockDist[i] = sensorInfo[i]/10;
         }
     }
-    //tldr round to closest block
-    else if(sensorInfo[i]>10){
-      if(int(sensorInfo[i])%10>6){
-        blockDist[i] = sensorInfo[i]/10 + 1;
-      }
-      else{
-        blockDist[i] = sensorInfo[i]/10;
-      }
-    }
 
-    //Long range sensor
+
     if(i==5){
       sensorInfo[i]=sensorInfo[i]-5;
       blockDist[i] = sensorInfo[i]/10;
     }
+    //tldr round to closest block
+
+    if(i==0||i==1||i==2){
+      if(sensorInfo[i]>12){
+          blockDist[i] = sensorInfo[i]/10;
+        }
+      else{
+        blockDist[i] = 0;
+      }
+    }
+
+    //Long range sensor
+
 
     if(i!=5){
       if (blockDist[i]>3){
@@ -237,14 +243,14 @@ void calibrationFB(){
   closestSensor = min(closestSensor, sensorInfo[2]);
   //Serial.println(closestSensor);
   while(1){
-    if(closestSensor <= 8){ //too close, move back to 8cm mark
+    if(closestSensor <= 7){ //too close, move back to 8cm mark
       calB();
       getSensorInfo(sensorInfo);
       closestSensor = min(sensorInfo[0],sensorInfo[1]);
       closestSensor = min(closestSensor, sensorInfo[2]);  
       //Serial.print("B :"); Serial.println(closestSensor);
     }
-    else if(closestSensor <= 13 && closestSensor > 8.5){ //too far, move front to 8cm mark
+    else if(closestSensor <= 13 && closestSensor > 7.5){ //too far, move front to 8cm mark
       calF();
       getSensorInfo(sensorInfo);
       closestSensor = min(sensorInfo[0],sensorInfo[1]);
@@ -256,6 +262,34 @@ void calibrationFB(){
     }
   }  
 }
+
+void calibrationFBS(){
+  md.setSpeeds(0,0); //stop before calibrating
+  getSensorInfo(sensorInfo);
+  float closestSensor = min(sensorInfo[0],sensorInfo[1]);
+  closestSensor = min(closestSensor, sensorInfo[2]);
+  //Serial.println(closestSensor);
+  while(1){
+    if(closestSensor <= 6.5){ //too close, move back to 8cm mark
+      calB();
+      getSensorInfo(sensorInfo);
+      closestSensor = min(sensorInfo[0],sensorInfo[1]);
+      closestSensor = min(closestSensor, sensorInfo[2]);  
+      //Serial.print("B :"); Serial.println(closestSensor);
+    }
+    else if(closestSensor <= 13 && closestSensor > 6.6){ //too far, move front to 8cm mark
+      calF();
+      getSensorInfo(sensorInfo);
+      closestSensor = min(sensorInfo[0],sensorInfo[1]);
+      closestSensor = min(closestSensor, sensorInfo[2]);  
+      //Serial.print("F :"); Serial.println(closestSensor);
+    }
+    else{
+      return;
+    }
+  }  
+}
+
 
 
 // SENSOR STUFF
@@ -271,23 +305,27 @@ void getSensorInfo(float sensorInfo[]){
 
 // RPM STUFF
 double rpmToSpeedR(double rpm_r){
-  double speedR = (rpm_r + 5.0856)/0.3123;
+  //double speedR = (rpm_r + 5.0856)/0.3123;
+  double speedR = (rpm_r + 6.6807)/0.3116;
   return speedR;
 }
 
 double speedToRPMR(double speedR){
-  double rpmR = (0.3123 * speedR) - 5.0856;
+  //double rpmR = (0.3123 * speedR) - 5.0856;
+  double rpmR = (0.3116 * speedR) - 6.6807;
   return rpmR;
 }
 
 
 double rpmToSpeedL(double rpm_l){
-  double speedL = (rpm_l + 7.7982)/0.3087;
+  //double speedL = (rpm_l + 7.7982)/0.3087;
+  double speedL = (rpm_l + 6.5911)/0.3113;
   return speedL;
 }
 
 double speedToRPML(double speedL){
-  double rpmL = (0.3087 * speedL) - 7.7982;
+  //double rpmL = (0.3087 * speedL) - 7.7982;
+  double rpmL = (0.3113 * speedL) - 6.5911;
   return rpmL;
 }
 
@@ -332,6 +370,22 @@ void moveForward(int dist){
   double target_ticks = TICK_PER_CM * dist; 
 
   right_encoder_val = left_encoder_val = 0;
+
+  md.setSpeeds(SPEED, -SPEED);
+
+  while(right_encoder_val < target_ticks){
+    startPID();
+    md.setM1Speed(rpmToSpeedL(inputL + outputL));
+    md.setM2Speed(-rpmToSpeedR(inputR + outputR));
+  }
+  md.setBrakes(400,400);
+  //delay(1000);
+}
+
+void moveOne(){
+  double target_ticks = 214.89; 
+
+  right_encoder_val = 0;
 
   md.setSpeeds(SPEED, -SPEED);
 
@@ -394,7 +448,7 @@ void turnR(int deg){
 }
 
 void turnRR(){
-  double target_ticks = 368; 
+  double target_ticks = 366; 
 
   right_encoder_val = left_encoder_val = 0;
 
@@ -410,7 +464,7 @@ void turnRR(){
 
 void turnLR(){
   double target_ticks = 369;
-
+  
   right_encoder_val = left_encoder_val = 0;
 
   md.setSpeeds(SPEED, SPEED);
@@ -470,12 +524,14 @@ void calB(){
 
 void startCal(){
   turnLH(); //turn 180
-  calibrationFB();
+  calibrationFBS(); //behind - 6.5
   //sCalFB(); //calibrate behind
   turnRR();
+  delay(20);
   calibrationLR();
-  calibrationFB();
+  calibrationFBS(); //behind - 6.5
   //sCalFB(); //calibrate left wall
   turnRR(); //face front
+  delay(20);
   calibrationLR(); //calibrate left wall
 }
