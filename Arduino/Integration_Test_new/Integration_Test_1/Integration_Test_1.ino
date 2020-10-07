@@ -67,9 +67,9 @@ void setup() {
   PCintPort::attachInterrupt(L_encoder, LeftEncoderInc, RISING);
 
 
-  setpointR = 117;
+  setpointR = 116;
   //setpointL = speedToRPML(SPEED);
-  setpointL = 117; //54.3;
+  setpointL = 118; //54.3;
   myPIDR.SetMode(AUTOMATIC);
   myPIDL.SetMode(AUTOMATIC);
 //  md.setSpeeds(SPEED,-SPEED); //L,R
