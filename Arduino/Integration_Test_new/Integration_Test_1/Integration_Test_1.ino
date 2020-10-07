@@ -89,26 +89,24 @@ void loop() {
         //moveForward(10);
         calibrationLR();
         calibrationFB();
-        Serial.println("movement done");
         break;
       }
       case 'L':
       {
         turnLR();
         calibrationLR();
-        Serial.println("movement done");
         break;
       }
       case 'R':
       {
         turnRR();
         calibrationLR();
-        Serial.println("movement done");
         break;
       }
       case 'C':
       {
         calibrationLR();
+        Serial.println("calibration done");
         break;
       }
       case'F':
