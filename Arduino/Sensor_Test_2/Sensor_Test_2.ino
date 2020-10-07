@@ -21,7 +21,7 @@ ZSharpIR frontRight(FR, A5);
 float sensorInfo[6];
 int rawVoltage[6];
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
 
 }
 
