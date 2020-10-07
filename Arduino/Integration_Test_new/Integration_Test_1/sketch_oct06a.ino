@@ -193,7 +193,7 @@ void turnLR(){ //90 L
 }
 
 void turnLH(){
-  double target_ticks = 750;
+  double target_ticks = 800;//750;
   right_encoder_val = 0;
   md.setSpeeds(SPEED,SPEED);
   while(right_encoder_val < target_ticks){
