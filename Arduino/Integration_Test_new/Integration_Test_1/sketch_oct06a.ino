@@ -79,7 +79,7 @@ void startPID(){
   myPIDR.Compute();
 }
 
-/*void moveForward(int dist){
+void moveForward(int dist){
   double target_ticks = TICK_PER_CM * dist; 
 
   right_encoder_val = left_encoder_val = 0;
@@ -91,12 +91,12 @@ void startPID(){
     md.setM1Speed(rpmToSpeedL(inputL + outputL));
     md.setM2Speed(-rpmToSpeedR(inputR + outputR));
   }
-  md.setBrakes(300,300);
+  md.setBrakes(400,400);
   //delay(1000);
-}*/
+}
 
 void moveOne(){
-  double target_ticks = 270; 
+  double target_ticks = 214.89; 
 
   right_encoder_val = 0;
 
@@ -107,8 +107,7 @@ void moveOne(){
     md.setM1Speed(rpmToSpeedL(inputL + outputL));
     md.setM2Speed(-rpmToSpeedR(inputR + outputR));
   }
-  md.setBrakes(400,400);
-  delay(20);
+  md.setBrakes(300,300);
   //delay(1000);
 }
 
@@ -161,7 +160,7 @@ void turnR(int deg){
 }*/
 
 void turnRR(){ //90 R
-  double target_ticks = 394;
+  double target_ticks = 368; 
 
   right_encoder_val = left_encoder_val = 0;
 
@@ -173,11 +172,10 @@ void turnRR(){ //90 R
     md.setM2Speed(-rpmToSpeedR(inputR + outputR));
   }
   md.setBrakes(400,400);
-  delay(20);
 }
 
 void turnLR(){ //90 L
-  double target_ticks = 401;
+  double target_ticks = 369;
   
   right_encoder_val = left_encoder_val = 0;
 
@@ -189,11 +187,10 @@ void turnLR(){ //90 L
     md.setM2Speed(rpmToSpeedR(inputR + outputR));
   }
   md.setBrakes(400,400);
-  delay(20);
 }
 
 void turnLH(){
-  double target_ticks = 800;//750;
+  double target_ticks = 750;
   right_encoder_val = 0;
   md.setSpeeds(SPEED,SPEED);
   while(right_encoder_val < target_ticks){
@@ -202,7 +199,6 @@ void turnLH(){
     md.setM2Speed(rpmToSpeedR(inputR + outputR));
   }
   md.setBrakes(400,400);
-  delay(20);
 }
 
 
@@ -262,7 +258,7 @@ void calibrationLRA(){
   float diff = fl - bl; //neg = turn r, pos = turn l
   //Serial.print("initial: "); Serial.println(diff);
   while(1){
-    if(diff >= 0.6 && diff <= 9){ //positive error, turn L
+    if(diff >= 0.3 && diff <= 9){ //positive error, turn L
       calL();
       getSensorInfo(sensorInfo);
       fl = sensorInfo[3]; 
@@ -270,7 +266,7 @@ void calibrationLRA(){
       diff = fl - bl;
       //Serial.print("+ :"); Serial.println(diff);
     }
-    else if(diff <= -0.6 && diff >= -9){ //negative error, turn R
+    else if(diff <= -0.3 && diff >= -9){ //negative error, turn R
       calR();
       getSensorInfo(sensorInfo);
       fl = sensorInfo[3]; 
