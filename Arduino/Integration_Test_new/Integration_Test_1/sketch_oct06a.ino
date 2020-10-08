@@ -79,7 +79,7 @@ void startPID(){
   myPIDR.Compute();
 }
 
-void moveForward(int dist){
+/*void moveForward(int dist){
   double target_ticks = TICK_PER_CM * dist; 
 
   right_encoder_val = left_encoder_val = 0;
@@ -93,10 +93,10 @@ void moveForward(int dist){
   }
   md.setBrakes(400,400);
   //delay(1000);
-}
+}*/
 
 void moveOne(){
-  double target_ticks = 214.89; 
+  double target_ticks = 270; 
 
   right_encoder_val = 0;
 
@@ -107,8 +107,8 @@ void moveOne(){
     md.setM1Speed(rpmToSpeedL(inputL + outputL));
     md.setM2Speed(-rpmToSpeedR(inputR + outputR));
   }
-  md.setBrakes(300,300);
-  //delay(1000);
+  md.setBrakes(400,400);
+  delay(30);
 }
 
 /*void moveBack(int dist){ //dist in cm
@@ -160,7 +160,7 @@ void turnR(int deg){
 }*/
 
 void turnRR(){ //90 R
-  double target_ticks = 368; 
+  double target_ticks = 394; 
 
   right_encoder_val = left_encoder_val = 0;
 
@@ -172,10 +172,11 @@ void turnRR(){ //90 R
     md.setM2Speed(-rpmToSpeedR(inputR + outputR));
   }
   md.setBrakes(400,400);
+  delay(20);
 }
 
 void turnLR(){ //90 L
-  double target_ticks = 369;
+  double target_ticks = 401;
   
   right_encoder_val = left_encoder_val = 0;
 
@@ -187,10 +188,11 @@ void turnLR(){ //90 L
     md.setM2Speed(rpmToSpeedR(inputR + outputR));
   }
   md.setBrakes(400,400);
+  delay(20);
 }
 
 void turnLH(){
-  double target_ticks = 750;
+  double target_ticks = 815;
   right_encoder_val = 0;
   md.setSpeeds(SPEED,SPEED);
   while(right_encoder_val < target_ticks){
@@ -199,6 +201,7 @@ void turnLH(){
     md.setM2Speed(rpmToSpeedR(inputR + outputR));
   }
   md.setBrakes(400,400);
+  delay(20);
 }
 
 
