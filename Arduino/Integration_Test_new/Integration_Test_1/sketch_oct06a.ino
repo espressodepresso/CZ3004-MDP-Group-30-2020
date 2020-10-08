@@ -96,7 +96,7 @@ void startPID(){
 }*/
 
 void moveOne(){
-  double target_ticks = 270; 
+  double target_ticks = 277; 
 
   right_encoder_val = 0;
 
