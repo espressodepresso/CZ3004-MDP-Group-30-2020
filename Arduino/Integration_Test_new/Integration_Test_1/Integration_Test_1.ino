@@ -87,20 +87,27 @@ void loop() {
       {
         moveOne();
         //moveForward(10);
-        calibrationLRA();
         calibrationFB();
         break;
       }
       case 'L':
       {
         turnLR();
-        calibrationLRA();
         break;
       }
       case 'R':
       {
         turnRR();
-        calibrationLRA();
+        break;
+      }
+      case'F':
+      {
+        calibrationFB();
+        break;
+      }
+      case 'U':
+      {
+        calibrationLRU();
         break;
       }
       case 'C':
@@ -109,9 +116,9 @@ void loop() {
         Serial.println("calibration done");
         break;
       }
-      case'F':
+      case 'K':
       {
-        calibrationFB();
+        calibrationLRK();
         break;
       }
       case 'V':
@@ -128,11 +135,6 @@ void loop() {
       {
         startCal();
         Serial.println("calibration done");
-        break;
-      }
-      case 'K':
-      {
-        turnLH();
         break;
       }
     }
