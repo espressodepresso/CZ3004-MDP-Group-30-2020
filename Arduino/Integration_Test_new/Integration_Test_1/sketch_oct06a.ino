@@ -245,23 +245,24 @@ void startCal(){
   calibrationFBS(); //behind - 6.5
   turnRR();
   delay(20);
-  calibrationLR();
+  calibrationLRA();
   calibrationFBS(); //behind - 6.5
   turnRR(); //face front
   delay(20);
-  calibrationLR(); //calibrate left wall
+  calibrationLRA(); //calibrate left wall
 }
 
-void calibrationLR(){
+void calibrationLRA(){
   //Serial.println("Calibrate");
   md.setSpeeds(0,0); //stop before calibrating
   getSensorInfo(sensorInfo);
+  //actualDist();
   float fl = sensorInfo[3]; //front left
   float bl = sensorInfo[4]; //back left
   float diff = fl - bl; //neg = turn r, pos = turn l
   //Serial.print("initial: "); Serial.println(diff);
   while(1){
-    if(diff >= 1 && diff <= 8){ //positive error, turn L
+    if(diff >= 0.6 && diff <= 9){ //positive error, turn L
       calL();
       getSensorInfo(sensorInfo);
       fl = sensorInfo[3]; 
@@ -269,7 +270,7 @@ void calibrationLR(){
       diff = fl - bl;
       //Serial.print("+ :"); Serial.println(diff);
     }
-    else if(diff <= -1 && diff >= -8){ //negative error, turn R
+    else if(diff <= -0.6 && diff >= -9){ //negative error, turn R
       calR();
       getSensorInfo(sensorInfo);
       fl = sensorInfo[3]; 
@@ -283,6 +284,14 @@ void calibrationLR(){
   }
 }
 
+void calibrationLRD(){
+  calibrationLRA();
+  turnLR();
+  calibrationFB();
+  turnRR();
+  calibrationLRA();
+}
+
 void calibrationFB(){
   md.setSpeeds(0,0); //stop before calibrating
   getSensorInfo(sensorInfo);
@@ -290,14 +299,14 @@ void calibrationFB(){
   closestSensor = min(closestSensor, sensorInfo[2]);
   //Serial.println(closestSensor);
   while(1){
-    if(closestSensor <= 7){ //too close, move back to 8cm mark
+    if(closestSensor <= 6.5){ //too close, move back to 8cm mark
       calB();
       getSensorInfo(sensorInfo);
       closestSensor = min(sensorInfo[0],sensorInfo[1]);
       closestSensor = min(closestSensor, sensorInfo[2]);  
       //Serial.print("B :"); Serial.println(closestSensor);
     }
-    else if(closestSensor <= 13 && closestSensor > 7.5){ //too far, move front to 8cm mark
+    else if(closestSensor <= 13 && closestSensor > 7){ //too far, move front to 8cm mark
       calF();
       getSensorInfo(sensorInfo);
       closestSensor = min(sensorInfo[0],sensorInfo[1]);
