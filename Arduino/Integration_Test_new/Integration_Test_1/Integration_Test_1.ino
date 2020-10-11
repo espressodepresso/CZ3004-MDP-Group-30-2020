@@ -137,6 +137,11 @@ void loop() {
         Serial.println("calibration done");
         break;
       }
+      /*case 'e':
+      {
+        turnLH();
+        break;
+      }*/
     }
     inputCmd.remove(0,1);   
     delay(100); 

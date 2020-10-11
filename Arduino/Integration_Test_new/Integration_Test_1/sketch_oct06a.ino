@@ -15,8 +15,13 @@ void sensorToRpi(){
     }
 
     if(i==5){
-      sensorInfo[i]=sensorInfo[i]-5;
-      blockDist[i] = sensorInfo[i]/10;
+      sensorInfo[i] = sensorInfo[i]+2.5;
+      if(sensorInfo[i]<19.5){
+        blockDist[i]=0;
+      }
+      else{
+        blockDist[i] = sensorInfo[i]/10-1;
+      }      
     }
     //tldr round to closest block
 
@@ -96,7 +101,7 @@ void startPID(){
 }*/
 
 void moveOne(){
-  double target_ticks = 277; 
+  double target_ticks = 287; 
 
   right_encoder_val = 0;
 
@@ -160,7 +165,7 @@ void turnR(int deg){
 }*/
 
 void turnRR(){ //90 R
-  double target_ticks = 403; 
+  double target_ticks = 385;//403; 
 
   right_encoder_val = left_encoder_val = 0;
 
@@ -172,11 +177,11 @@ void turnRR(){ //90 R
     md.setM2Speed(-rpmToSpeedR(inputR + outputR));
   }
   md.setBrakes(400,400);
-  delay(100);
+  delay(30);
 }
 
 void turnLR(){ //90 L
-  double target_ticks = 405;//409;
+  double target_ticks = 395;//405;//409;
   
   right_encoder_val = left_encoder_val = 0;
 
@@ -188,7 +193,7 @@ void turnLR(){ //90 L
     md.setM2Speed(rpmToSpeedR(inputR + outputR));
   }
   md.setBrakes(400,400);
-  delay(100);
+  delay(30);
 }
 
 void turnLH(){
@@ -201,7 +206,7 @@ void turnLH(){
     md.setM2Speed(rpmToSpeedR(inputR + outputR));
   }
   md.setBrakes(400,400);
-  delay(20);
+  delay(30);
 }
 
 
