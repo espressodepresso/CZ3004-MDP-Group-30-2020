@@ -166,7 +166,7 @@ void turnR(int deg){
 }*/
 
 void turnRR(){ //90 R
-  double target_ticks = 401;//398;//404;//402; //385;//403; 
+  double target_ticks = 380;//404;//402; //385;//403; 
 
   right_encoder_val = left_encoder_val = 0;
 
@@ -178,11 +178,11 @@ void turnRR(){ //90 R
     md.setM2Speed(-rpmToSpeedR(inputR + outputR));
   }
   md.setBrakes(400,400);
-  delay(50);
+  delay(100);
 }
 
 void turnLR(){ //90 L
-  double target_ticks = 405;//409;//395;//405;//409;
+  double target_ticks = 387;//409;//395;//405;//409;
   
   right_encoder_val = left_encoder_val = 0;
 
@@ -194,7 +194,7 @@ void turnLR(){ //90 L
     md.setM2Speed(rpmToSpeedR(inputR + outputR));
   }
   md.setBrakes(400,400);
-  delay(50);
+  delay(100);
 }
 
 void turnLH(){

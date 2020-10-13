@@ -34,10 +34,10 @@ unsigned long timeTakenR = 0, timeTakenL = 0;
 double inputR = 0, outputR = 0, setpointR;
 double inputL = 0, outputL = 0, setpointL;
 //double kpR = 1, kiR = 0.001, kdR = 0;
-double kpR = 1.056, kiR = 0, kdR = 0;
+double kpR = 1, /*1.056*/ kiR = 0, kdR = 0;
 //value for RPMR = 74, RPML = 70
 //double kpL = 1.05, kiL = 0.0022, kdL = 0.004;
-double kpL = 1, kiL = 0, kdL = 0;
+double kpL = 1.063, kiL = 0, kdL = 0;
 int deg; int dist;
 
 String inputCmd;
@@ -63,9 +63,9 @@ void setup() {
   PCintPort::attachInterrupt(L_encoder, LeftEncoderInc, RISING);
 
 
-  setpointR = 116;
+  setpointR = 115.7;
   //setpointL = speedToRPML(SPEED);
-  setpointL = 117.5;//114.9; //54.3;
+  setpointL = 118; //114.9; //54.3;
   myPIDR.SetMode(AUTOMATIC);  
   myPIDL.SetMode(AUTOMATIC);
 //  md.setSpeeds(SPEED,-SPEED); //L,R
@@ -140,7 +140,7 @@ void loop() {
       } 
     }
     inputCmd.remove(0,1);   
-    //delay(100);0000000000000000000 
+    //delay(100);
     }    
 }
 /*
