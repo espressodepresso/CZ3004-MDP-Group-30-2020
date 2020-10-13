@@ -37,7 +37,7 @@ double inputL = 0, outputL = 0, setpointL;
 double kpR = 1, /*1.056*/ kiR = 0, kdR = 0;
 //value for RPMR = 74, RPML = 70
 //double kpL = 1.05, kiL = 0.0022, kdL = 0.004;
-double kpL = 1.063, kiL = 0, kdL = 0;
+double kpL = 1.07, kiL = 0, kdL = 0;
 int deg; int dist;
 
 String inputCmd;
@@ -63,7 +63,7 @@ void setup() {
   PCintPort::attachInterrupt(L_encoder, LeftEncoderInc, RISING);
 
 
-  setpointR = 115.7;
+  setpointR = 115;
   //setpointL = speedToRPML(SPEED);
   setpointL = 118; //114.9; //54.3;
   myPIDR.SetMode(AUTOMATIC);  
@@ -83,6 +83,7 @@ void loop() {
       {
         moveOne();
         //moveForward(10);
+        delay(20);
         calibrationFB();
         break;
       }
@@ -140,7 +141,7 @@ void loop() {
       } 
     }
     inputCmd.remove(0,1);   
-    delay(20);
+    delay(120);
     }    
 }
 /*

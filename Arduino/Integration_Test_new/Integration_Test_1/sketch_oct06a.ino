@@ -102,7 +102,7 @@ void startPID(){
 }*/
 
 void moveOne(){
-  double target_ticks = 287; 
+  double target_ticks = 282; 
 
   right_encoder_val = 0;
 
@@ -114,7 +114,7 @@ void moveOne(){
     md.setM2Speed(-rpmToSpeedR(inputR + outputR));
   }
   md.setBrakes(400,400);
-  delay(30);
+  delay(250);
 }
 
 /*void moveBack(int dist){ //dist in cm
@@ -166,7 +166,7 @@ void turnR(int deg){
 }*/
 
 void turnRR(){ //90 R
-  double target_ticks = 380;//404;//402; //385;//403; 
+  double target_ticks = 382;//404;//402; //385;//403; 
 
   right_encoder_val = left_encoder_val = 0;
 
@@ -178,7 +178,7 @@ void turnRR(){ //90 R
     md.setM2Speed(-rpmToSpeedR(inputR + outputR));
   }
   md.setBrakes(400,400);
-  delay(30);
+  delay(250);
 }
 
 void turnLR(){ //90 L
@@ -194,11 +194,11 @@ void turnLR(){ //90 L
     md.setM2Speed(rpmToSpeedR(inputR + outputR));
   }
   md.setBrakes(400,400);
-  delay(30);
+  delay(250);
 }
 
 void turnLH(){
-  double target_ticks = 825;//815;
+  double target_ticks = 788;//815;
   right_encoder_val = 0;
   md.setSpeeds(SPEED,SPEED);
   while(right_encoder_val < target_ticks){
@@ -207,7 +207,7 @@ void turnLH(){
     md.setM2Speed(rpmToSpeedR(inputR + outputR));
   }
   md.setBrakes(400,400);
-  delay(30);
+  delay(250);
 }
 
 
@@ -366,14 +366,14 @@ void calibrationFB(){
   closestSensor = min(closestSensor, sensorInfo[2]);
   //Serial.println(closestSensor);
   while(1){
-    if(closestSensor <= 7){ //too close, move back to 8cm mark
+    if(closestSensor <= 6){ //too close, move back to 8cm mark
       calB();
       getSensorInfo(sensorInfo);
       closestSensor = min(sensorInfo[0],sensorInfo[1]);
       closestSensor = min(closestSensor, sensorInfo[2]);  
       //Serial.print("B :"); Serial.println(closestSensor);
     }
-    else if(closestSensor <= 11 && closestSensor > 7.5){ //too far, move front to 8cm mark
+    else if(closestSensor <= 11 && closestSensor > 7){ //too far, move front to 8cm mark
       calF();
       getSensorInfo(sensorInfo);
       closestSensor = min(sensorInfo[0],sensorInfo[1]);
