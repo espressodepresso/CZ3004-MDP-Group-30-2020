@@ -75,7 +75,7 @@ void setup() {
 
 void loop() {
 
-  inputCmd = Serial.readString();
+  inputCmd = Serial.readStringUntil('@');
   while (!(inputCmd == NULL)){
     //Serial.println("loop");
     switch(inputCmd[0]){
@@ -140,7 +140,7 @@ void loop() {
       } 
     }
     inputCmd.remove(0,1);   
-    delay(100); 
+    //delay(100);0000000000000000000 
     }    
 }
 /*

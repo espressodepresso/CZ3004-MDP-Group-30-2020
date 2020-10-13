@@ -166,7 +166,7 @@ void turnR(int deg){
 }*/
 
 void turnRR(){ //90 R
-  double target_ticks = 399//404;//402; //385;//403; 
+  double target_ticks = 401;//398;//404;//402; //385;//403; 
 
   right_encoder_val = left_encoder_val = 0;
 
@@ -182,7 +182,7 @@ void turnRR(){ //90 R
 }
 
 void turnLR(){ //90 L
-  double target_ticks = 404;//409;//395;//405;//409;
+  double target_ticks = 405;//409;//395;//405;//409;
   
   right_encoder_val = left_encoder_val = 0;
 
@@ -249,11 +249,11 @@ void startCal(){
   turnLH(); //turn 180
   calibrationFBS(); //behind - 6.5
   turnRR();
-  delay(20);
+  //delay(20);
   calibrationLRA();
   calibrationFBS(); //behind - 6.5
   turnRR(); //face front
-  delay(20);
+  //delay(20);
   calibrationLRA(); //calibrate left wall
 }
 
