@@ -15,16 +15,17 @@ void sensorToRpi(){
     }
 
     if(i==5){
-      sensorInfo[i] = sensorInfo[i]+2.5;
-      if(sensorInfo[i]<19.5){
+      sensorInfo[i] = sensorInfo[i]-5;
+      if(sensorInfo[i]<22){
         blockDist[i]=0;
       }
       else{
-        blockDist[i] = sensorInfo[i]/10-1;
+        blockDist[i] = sensorInfo[i]/10;
+        //blockDist[i]=5;
       }      
     }
     //tldr round to closest block
-
+    //front sensors 
     if(i==0||i==1||i==2){
       if(sensorInfo[i]>12){
           blockDist[i] = sensorInfo[i]/10;
@@ -113,7 +114,7 @@ void moveOne(){
     md.setM2Speed(-rpmToSpeedR(inputR + outputR));
   }
   md.setBrakes(400,400);
-  delay(30);
+  delay(50);
 }
 
 /*void moveBack(int dist){ //dist in cm
@@ -165,7 +166,7 @@ void turnR(int deg){
 }*/
 
 void turnRR(){ //90 R
-  double target_ticks = 385;//403; 
+  double target_ticks = 399//404;//402; //385;//403; 
 
   right_encoder_val = left_encoder_val = 0;
 
@@ -177,11 +178,11 @@ void turnRR(){ //90 R
     md.setM2Speed(-rpmToSpeedR(inputR + outputR));
   }
   md.setBrakes(400,400);
-  delay(30);
+  delay(50);
 }
 
 void turnLR(){ //90 L
-  double target_ticks = 395;//405;//409;
+  double target_ticks = 404;//409;//395;//405;//409;
   
   right_encoder_val = left_encoder_val = 0;
 
@@ -193,11 +194,11 @@ void turnLR(){ //90 L
     md.setM2Speed(rpmToSpeedR(inputR + outputR));
   }
   md.setBrakes(400,400);
-  delay(30);
+  delay(50);
 }
 
 void turnLH(){
-  double target_ticks = 815;
+  double target_ticks = 825;//815;
   right_encoder_val = 0;
   md.setSpeeds(SPEED,SPEED);
   while(right_encoder_val < target_ticks){
@@ -206,7 +207,7 @@ void turnLH(){
     md.setM2Speed(rpmToSpeedR(inputR + outputR));
   }
   md.setBrakes(400,400);
-  delay(30);
+  delay(50);
 }
 
 
@@ -372,7 +373,7 @@ void calibrationFB(){
       closestSensor = min(closestSensor, sensorInfo[2]);  
       //Serial.print("B :"); Serial.println(closestSensor);
     }
-    else if(closestSensor <= 12 && closestSensor > 7.5){ //too far, move front to 8cm mark
+    else if(closestSensor <= 11 && closestSensor > 7.5){ //too far, move front to 8cm mark
       calF();
       getSensorInfo(sensorInfo);
       closestSensor = min(sensorInfo[0],sensorInfo[1]);
@@ -386,7 +387,7 @@ void calibrationFB(){
       closestSensor = min(closestSensor, sensorInfo[2]);  
       //Serial.print("B :"); Serial.println(closestSensor);
     }
-    else if(closestSensor <= 24 && closestSensor > 17){ //too far, move front to 8cm mark
+    else if(closestSensor <= 20 && closestSensor > 17){ //too far, move front to 8cm mark
       calF();
       getSensorInfo(sensorInfo);
       closestSensor = min(sensorInfo[0],sensorInfo[1]);

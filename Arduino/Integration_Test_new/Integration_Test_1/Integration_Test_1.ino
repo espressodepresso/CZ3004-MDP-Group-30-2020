@@ -40,10 +40,6 @@ double kpR = 1.056, kiR = 0, kdR = 0;
 double kpL = 1, kiL = 0, kdL = 0;
 int deg; int dist;
 
-struct cmd{
-  char command;
-  int arg;
-};
 String inputCmd;
 
 PID myPIDR(&inputR, &outputR, &setpointR, kpR, kiR, kdR, DIRECT);
@@ -69,8 +65,8 @@ void setup() {
 
   setpointR = 116;
   //setpointL = speedToRPML(SPEED);
-  setpointL = 114.9; //54.3;
-  myPIDR.SetMode(AUTOMATIC);
+  setpointL = 117.5;//114.9; //54.3;
+  myPIDR.SetMode(AUTOMATIC);  
   myPIDL.SetMode(AUTOMATIC);
 //  md.setSpeeds(SPEED,-SPEED); //L,R
   startTimeR = millis();
@@ -107,7 +103,7 @@ void loop() {
       }
       case 'U':
       {
-        calibrationLRU();
+        calibrationLRA();
         break;
       }
       case 'C':
@@ -137,11 +133,11 @@ void loop() {
         Serial.println("calibration done");
         break;
       }
-      /*case 'e':
+      case 'e':
       {
         turnLH();
         break;
-      }*/
+      } 
     }
     inputCmd.remove(0,1);   
     delay(100); 
