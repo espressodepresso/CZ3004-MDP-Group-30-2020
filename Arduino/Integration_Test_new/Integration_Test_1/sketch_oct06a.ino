@@ -114,7 +114,7 @@ void moveOne(){
     md.setM2Speed(-rpmToSpeedR(inputR + outputR));
   }
   md.setBrakes(400,400);
-  delay(50);
+  //delay(50);
 }
 
 /*void moveBack(int dist){ //dist in cm
@@ -178,7 +178,7 @@ void turnRR(){ //90 R
     md.setM2Speed(-rpmToSpeedR(inputR + outputR));
   }
   md.setBrakes(400,400);
-  delay(100);
+  //delay(100);
 }
 
 void turnLR(){ //90 L
@@ -194,7 +194,7 @@ void turnLR(){ //90 L
     md.setM2Speed(rpmToSpeedR(inputR + outputR));
   }
   md.setBrakes(400,400);
-  delay(100);
+  //delay(100);
 }
 
 void turnLH(){
@@ -207,7 +207,7 @@ void turnLH(){
     md.setM2Speed(rpmToSpeedR(inputR + outputR));
   }
   md.setBrakes(400,400);
-  delay(50);
+  //delay(50);
 }
 
 
