@@ -140,7 +140,7 @@ void loop() {
       } 
     }
     inputCmd.remove(0,1);   
-    //delay(100);
+    delay(20);
     }    
 }
 /*
