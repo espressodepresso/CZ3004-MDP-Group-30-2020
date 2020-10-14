@@ -166,7 +166,7 @@ void turnR(int deg){
 }*/
 
 void turnRR(){ //90 R
-  double target_ticks = 382;//404;//402; //385;//403; 
+  double target_ticks = 383;//380;//404;//402; //385;//403; 
 
   right_encoder_val = left_encoder_val = 0;
 
@@ -182,7 +182,7 @@ void turnRR(){ //90 R
 }
 
 void turnLR(){ //90 L
-  double target_ticks = 386;//409;//395;//405;//409;
+  double target_ticks = 385;//386;//409;//395;//405;//409;
   
   right_encoder_val = left_encoder_val = 0;
 
@@ -383,14 +383,22 @@ void calibrationFB(){
       closestSensor = min(closestSensor, sensorInfo[2]);  
       //Serial.print("B :"); Serial.println(closestSensor);
     }
+<<<<<<< Updated upstream
     else if(closestSensor <= 11 && closestSensor > 8){ //too far, move front to 8cm mark
+=======
+    else if(closestSensor <= 10 && closestSensor > 7){ //too far, move front to 8cm mark
+>>>>>>> Stashed changes
       calF();
       getSensorInfo(sensorInfo);
       closestSensor = min(sensorInfo[0],sensorInfo[1]);
       closestSensor = min(closestSensor, sensorInfo[2]);  
       //Serial.print("F :"); Serial.println(closestSensor);
     }
+<<<<<<< Updated upstream
     else if(closestSensor <= 16 && closestSensor>12){ //too close, move back to 8cm mark
+=======
+    else if(closestSensor <= 16 && closestSensor>13.5){ //too close, move back to 8cm mark
+>>>>>>> Stashed changes
       calB();
       getSensorInfo(sensorInfo);
       closestSensor = min(sensorInfo[0],sensorInfo[1]);
