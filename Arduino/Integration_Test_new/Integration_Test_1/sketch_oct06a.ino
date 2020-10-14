@@ -114,7 +114,7 @@ void moveOne(){
     md.setM2Speed(-rpmToSpeedR(inputR + outputR));
   }
   md.setBrakes(400,400);
-  delay(250);
+  //delay(250);
 }
 
 /*void moveBack(int dist){ //dist in cm
@@ -178,11 +178,11 @@ void turnRR(){ //90 R
     md.setM2Speed(-rpmToSpeedR(inputR + outputR));
   }
   md.setBrakes(400,400);
-  delay(250);
+  //delay(250);
 }
 
 void turnLR(){ //90 L
-  double target_ticks = 387;//409;//395;//405;//409;
+  double target_ticks = 386;//409;//395;//405;//409;
   
   right_encoder_val = left_encoder_val = 0;
 
@@ -194,7 +194,7 @@ void turnLR(){ //90 L
     md.setM2Speed(rpmToSpeedR(inputR + outputR));
   }
   md.setBrakes(400,400);
-  delay(250);
+  //delay(250);
 }
 
 void turnLH(){
@@ -207,7 +207,7 @@ void turnLH(){
     md.setM2Speed(rpmToSpeedR(inputR + outputR));
   }
   md.setBrakes(400,400);
-  delay(250);
+  //delay(250);
 }
 
 
@@ -247,14 +247,19 @@ void calB(){
 
 void startCal(){
   turnLH(); //turn 180
+  delay(100);
   calibrationFBS(); //behind - 6.5
+  delay(100);
   turnRR();
-  //delay(20);
+  delay(100);
   calibrationLRA();
+  delay(100);
   calibrationFBS(); //behind - 6.5
+  delay(100);
   turnRR(); //face front
-  //delay(20);
+  delay(100);
   calibrationLRA(); //calibrate left wall
+  //delay(100);
 }
 
 void calibrationLRA(){
@@ -353,10 +358,15 @@ void calibrationLRK(){
 
 void calibrationLRD(){
   calibrationLRA();
+  delay(250);
   turnLR();
+  delay(250);
   calibrationFB();
+  delay(250);
   turnRR();
+  delay(250);
   calibrationLRA();
+  //delay(250);
 }
 
 void calibrationFB(){
