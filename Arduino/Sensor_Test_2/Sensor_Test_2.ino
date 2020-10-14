@@ -14,8 +14,8 @@ ZSharpIR rightBack(RB, A1);
 ZSharpIR leftBack(LB, A0);
 ZSharpIR leftFront(LF, A3);
 ZSharpIR frontMiddle(FM, A4);
-ZSharpIR frontLeft(FL, A2);
-ZSharpIR frontRight(FR, A5);
+ZSharpIR frontLeft(FL, A5);
+ZSharpIR frontRight(FR, A2);
 
 
 float sensorInfo[6];

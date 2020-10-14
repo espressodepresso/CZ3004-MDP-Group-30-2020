@@ -48,8 +48,9 @@ ZSharpIR rightBack(RB, A1);
 ZSharpIR leftBack(LB, A0);
 ZSharpIR leftFront(LF, A3);
 ZSharpIR frontMiddle(FM, A4);
-ZSharpIR frontLeft(FL, A2);
-ZSharpIR frontRight(FR, A5);
+ZSharpIR frontLeft(FL, A5);
+ZSharpIR frontRight(FR, A2);
+
 
 int count = 1;
 
@@ -118,12 +119,6 @@ void loop() {
         Serial.println("calibration done");
         break;
       }
-      case 'K':
-      {
-        calibrationLRK();
-        delay(250);
-        break;
-      }
       case 'V':
       {
         sensorToRpi();       
@@ -147,8 +142,22 @@ void loop() {
         delay(250);
         break;
       } 
+      case 'U':
+      {
+        moveOne();
+        break;
+      }
+      case 'H':
+      {
+        turnLR();
+        break;
+      }
+      case 'K':
+      {
+        turnRR();
+        break;
+      }
     }
     inputCmd.remove(0,1);   
-    delay(200);
     }    
 }
