@@ -111,7 +111,7 @@ void moveOne(){
     startPID();
     md.setM1Speed(rpmToSpeedL(inputL + outputL));
     md.setM2Speed(-rpmToSpeedR(inputR + outputR));
-    Serial.println(inputL+outputL);
+    //Serial.println(inputL+outputL);
   }
   md.setBrakes(400,400);
 }
@@ -165,7 +165,7 @@ void turnR(int deg){
 }*/
 
 void turnRR(){ //90 R
-  double target_ticks = 384;//380;//404;//402; //385;//403; 
+  double target_ticks = 386;//380;//404;//402; //385;//403; 
 
   right_encoder_val = left_encoder_val = 0;
 
@@ -332,7 +332,7 @@ void calibrationFB(){
       closestSensor = min(closestSensor, sensorInfo[2]);  
       //Serial.print("B :"); Serial.println(closestSensor);
     }
-    else if(closestSensor <= 22 && closestSensor > 16.5){ //too far, move front to 8cm mark
+    else if(closestSensor <= 19.5 && closestSensor > 16.5){ //too far, move front to 8cm mark
       calF();
       getSensorInfo(sensorInfo);
       closestSensor = min(sensorInfo[0],sensorInfo[1]);
