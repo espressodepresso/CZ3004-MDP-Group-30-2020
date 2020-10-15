@@ -67,7 +67,7 @@ void setup() {
 
   setpointR = 118;
   //setpointL = speedToRPML(SPEED);
-  setpointL = 118;//119;//117.55; //114.9; //54.3;
+  setpointL = 118.6;//119;//117.55; //114.9; //54.3;
   myPIDR.SetMode(AUTOMATIC);  
   myPIDL.SetMode(AUTOMATIC);
 //  md.setSpeeds(SPEED,-SPEED); //L,R
@@ -150,18 +150,22 @@ void loop() {
         //moveOne();
         moveForward(dist);
         calibrationFBF();
+        calibrationLRA();
+        delay(200);
         break;
       }
       case 'G':
       {
         turnLR();
         calibrationLRA();
+        delay(200);
         break;
       }
       case 'J':
       {
         turnRR();
         calibrationLRA();
+        delay(200);
         break;
       }
     }

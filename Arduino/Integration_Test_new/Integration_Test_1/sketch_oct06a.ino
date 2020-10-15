@@ -165,7 +165,7 @@ void turnR(int deg){
 }*/
 
 void turnRR(){ //90 R
-  double target_ticks = 386;//380;//404;//402; //385;//403; 
+  double target_ticks = 385;//380;//404;//402; //385;//403; 
 
   right_encoder_val = left_encoder_val = 0;
 
@@ -266,6 +266,9 @@ void calibrationLRA(){
   //actualDist();
   float fl = sensorInfo[3]; //front left
   float bl = sensorInfo[4]; //back left
+  if (bl>20||fl>20){
+    return;
+  }
   float diff = fl - bl; //neg = turn r, pos = turn l
   //Serial.print("initial: "); Serial.println(diff);
   while(1){
