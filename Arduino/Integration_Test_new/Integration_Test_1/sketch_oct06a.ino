@@ -84,8 +84,8 @@ void startPID(){
   myPIDR.Compute();
 }
 
-/*void moveForward(int dist){
-  double target_ticks = TICK_PER_CM * dist; 
+void moveForward(int dist){ //dist in 10 cm
+  double target_ticks = 282 * dist; 
 
   right_encoder_val = left_encoder_val = 0;
 
@@ -98,10 +98,10 @@ void startPID(){
   }
   md.setBrakes(400,400);
   //delay(1000);
-}*/
+}
 
 void moveOne(){
-  double target_ticks = 282; 
+  double target_ticks = 281; 
 
   right_encoder_val = 0;
 
@@ -111,6 +111,7 @@ void moveOne(){
     startPID();
     md.setM1Speed(rpmToSpeedL(inputL + outputL));
     md.setM2Speed(-rpmToSpeedR(inputR + outputR));
+    Serial.println(inputL+outputL);
   }
   md.setBrakes(400,400);
 }
@@ -164,7 +165,7 @@ void turnR(int deg){
 }*/
 
 void turnRR(){ //90 R
-  double target_ticks = 385;//380;//404;//402; //385;//403; 
+  double target_ticks = 384;//380;//404;//402; //385;//403; 
 
   right_encoder_val = left_encoder_val = 0;
 
@@ -180,7 +181,7 @@ void turnRR(){ //90 R
 }
 
 void turnLR(){ //90 L
-  double target_ticks = 386;//386;//409;//395;//405;//409;
+  double target_ticks = 384;//386;//409;//395;//405;//409;
   
   right_encoder_val = left_encoder_val = 0;
 
@@ -196,7 +197,7 @@ void turnLR(){ //90 L
 }
 
 void turnLH(){
-  double target_ticks = 788;//815;
+  double target_ticks = 787;//815;
   right_encoder_val = 0;
   md.setSpeeds(SPEED,SPEED);
   while(right_encoder_val < target_ticks){

@@ -38,6 +38,7 @@ double kpR = 1, /*1.056*/ kiR = 0, kdR = 0;
 //value for RPMR = 74, RPML = 70
 //double kpL = 1.05, kiL = 0.0022, kdL = 0.004;
 double kpL = 1.07, kiL = 0, kdL = 0;
+//double kpL = 1.07, kiL = 0, kdL = 0.001;
 int deg; int dist;
 
 String inputCmd;
@@ -66,7 +67,7 @@ void setup() {
 
   setpointR = 118;
   //setpointL = speedToRPML(SPEED);
-  setpointL = 117.55; //114.9; //54.3;
+  setpointL = 117;//119;//117.55; //114.9; //54.3;
   myPIDR.SetMode(AUTOMATIC);  
   myPIDL.SetMode(AUTOMATIC);
 //  md.setSpeeds(SPEED,-SPEED); //L,R
@@ -144,7 +145,8 @@ void loop() {
       } 
       case 'Y':
       {
-        moveOne();
+        //moveOne();
+        moveForward(7);
         calibrationFBF();
         break;
       }
