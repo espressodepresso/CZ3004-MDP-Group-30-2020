@@ -142,19 +142,22 @@ void loop() {
         delay(250);
         break;
       } 
-      case 'U':
+      case 'Y':
       {
         moveOne();
+        calibrationFBF();
         break;
       }
-      case 'H':
+      case 'G':
       {
         turnLR();
+        calibrationLRA();
         break;
       }
-      case 'K':
+      case 'J':
       {
         turnRR();
+        calibrationLRA();
         break;
       }
     }
