@@ -180,7 +180,7 @@ void turnRR(){ //90 R
 }
 
 void turnLR(){ //90 L
-  double target_ticks = 385;//386;//409;//395;//405;//409;
+  double target_ticks = 386;//386;//409;//395;//405;//409;
   
   right_encoder_val = left_encoder_val = 0;
 
