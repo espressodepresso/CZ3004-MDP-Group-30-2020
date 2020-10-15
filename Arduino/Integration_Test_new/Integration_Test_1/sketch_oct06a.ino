@@ -26,11 +26,12 @@ void sensorToRpi(){
     //tldr round to closest block
     //front sensors 
     if(i==0||i==1||i==2){
-      if(sensorInfo[i]>12){
-          blockDist[i] = sensorInfo[i]/10;
+      if(sensorInfo[i]<12){
+          blockDist[i] = 0;
         }
       else{
-        blockDist[i] = 0;
+        sensorInfo[i]=sensorInfo[i]-1.5;
+        blockDist[i] = sensorInfo[i]/10;
       }
     }
 
@@ -85,7 +86,7 @@ void startPID(){
 }
 
 void moveForward(int dist){ //dist in 10 cm
-  double target_ticks = 282 * dist; 
+  double target_ticks = 270 * dist; 
 
   right_encoder_val = left_encoder_val = 0;
 
@@ -101,7 +102,7 @@ void moveForward(int dist){ //dist in 10 cm
 }
 
 void moveOne(){
-  double target_ticks = 281; 
+  double target_ticks = 298;//282; 
 
   right_encoder_val = 0;
 
@@ -165,7 +166,7 @@ void turnR(int deg){
 }*/
 
 void turnRR(){ //90 R
-  double target_ticks = 385;//380;//404;//402; //385;//403; 
+  double target_ticks = 393;//386;//380;//404;//402; //385;//403; 
 
   right_encoder_val = left_encoder_val = 0;
 
@@ -181,7 +182,7 @@ void turnRR(){ //90 R
 }
 
 void turnLR(){ //90 L
-  double target_ticks = 384;//386;//409;//395;//405;//409;
+  double target_ticks = 389;//386;//409;//395;//405;//409;
   
   right_encoder_val = left_encoder_val = 0;
 
@@ -266,9 +267,6 @@ void calibrationLRA(){
   //actualDist();
   float fl = sensorInfo[3]; //front left
   float bl = sensorInfo[4]; //back left
-  if (bl>20||fl>20){
-    return;
-  }
   float diff = fl - bl; //neg = turn r, pos = turn l
   //Serial.print("initial: "); Serial.println(diff);
   while(1){

@@ -65,9 +65,9 @@ void setup() {
   PCintPort::attachInterrupt(L_encoder, LeftEncoderInc, RISING);
 
 
-  setpointR = 118;
+  setpointR = 116;//116;
   //setpointL = speedToRPML(SPEED);
-  setpointL = 118.6;//119;//117.55; //114.9; //54.3;
+  setpointL = 119;//120;//119;//117.55; //114.9; //54.3;
   myPIDR.SetMode(AUTOMATIC);  
   myPIDL.SetMode(AUTOMATIC);
 //  md.setSpeeds(SPEED,-SPEED); //L,R
@@ -149,14 +149,15 @@ void loop() {
         int dist = (inputCmd[0]-'0');
         //moveOne();
         moveForward(dist);
+        delay(200);
         calibrationFBF();
-        calibrationLRA();
         delay(200);
         break;
       }
       case 'G':
       {
         turnLR();
+        delay(200);
         calibrationLRA();
         delay(200);
         break;
@@ -164,6 +165,7 @@ void loop() {
       case 'J':
       {
         turnRR();
+        delay(200);
         calibrationLRA();
         delay(200);
         break;
