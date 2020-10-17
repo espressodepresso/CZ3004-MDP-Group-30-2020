@@ -14,7 +14,8 @@
 #define L_encoder 3
 //#define RPM_L 54
 //#define RPM_R 57
-#define SPEED 300
+#define SPEEDL 319  
+#define SPEEDR 255
 #define TICK_PER_CM 20.96//20//25//29.83
 #define TICK_PER_DEG 4//.3
 #define COUNT 50
@@ -34,11 +35,13 @@ unsigned long timeTakenR = 0, timeTakenL = 0;
 double inputR = 0, outputR = 0, setpointR;
 double inputL = 0, outputL = 0, setpointL;
 //double kpR = 1, kiR = 0.001, kdR = 0;
-double kpR = 1, /*1.056*/ kiR = 0, kdR = 0;
+//double kpR = 1, /*1.056*/ kiR = 0, kdR = 0;
 //value for RPMR = 74, RPML = 70
 //double kpL = 1.05, kiL = 0.0022, kdL = 0.004;
-double kpL = 1.07, kiL = 0, kdL = 0;
+//double kpL = 1.07, kiL = 0, kdL = 0;
 //double kpL = 1.07, kiL = 0, kdL = 0.001;
+double kpR = 0.58, kiR = 0, kdR = 0;
+double kpL = 0.5, kiL = 0, kdL = 0;
 int deg; int dist;
 
 String inputCmd;
@@ -65,9 +68,9 @@ void setup() {
   PCintPort::attachInterrupt(L_encoder, LeftEncoderInc, RISING);
 
 
-  setpointR = 116;//116;
+  setpointR = 113.4;//116;
   //setpointL = speedToRPML(SPEED);
-  setpointL = 119;//120;//119;//117.55; //114.9; //54.3;
+  setpointL = 125;//120;//119;//117.55; //114.9; //54.3;
   myPIDR.SetMode(AUTOMATIC);  
   myPIDL.SetMode(AUTOMATIC);
 //  md.setSpeeds(SPEED,-SPEED); //L,R
@@ -85,20 +88,22 @@ void loop() {
       {
         moveOne();
         delay(250);
-        calibrationFB();
-        delay(250);
+        //calibrationFB();
+        //delay(250);
         break;
       }
       case 'L':
       {
         turnLR();
         delay(250);
+        calibrationFB();
         break;
       }
       case 'R':
       {
         turnRR();
         delay(250);
+        calibrationFB();
         break;
       }
       case'F':

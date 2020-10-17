@@ -30,7 +30,7 @@ void sensorToRpi(){
           blockDist[i] = 0;
         }
       else{
-        sensorInfo[i]=sensorInfo[i]-1.5;
+        sensorInfo[i]=sensorInfo[i]-2.5;
         blockDist[i] = sensorInfo[i]/10;
       }
     }
@@ -86,11 +86,11 @@ void startPID(){
 }
 
 void moveForward(int dist){ //dist in 10 cm
-  double target_ticks = 270 * dist; 
+  double target_ticks = 298 * dist; 
 
   right_encoder_val = left_encoder_val = 0;
 
-  md.setSpeeds(SPEED, -SPEED);
+  md.setSpeeds(SPEEDL, -SPEEDR);
 
   while(right_encoder_val < target_ticks){
     startPID();
@@ -102,11 +102,11 @@ void moveForward(int dist){ //dist in 10 cm
 }
 
 void moveOne(){
-  double target_ticks = 298;//282; 
+  double target_ticks = 295;//282; 
 
   right_encoder_val = 0;
 
-  md.setSpeeds(SPEED, -SPEED);
+  md.setSpeeds(SPEEDL, -SPEEDR);
 
   while(right_encoder_val < target_ticks){
     startPID();
@@ -166,11 +166,11 @@ void turnR(int deg){
 }*/
 
 void turnRR(){ //90 R
-  double target_ticks = 393;//386;//380;//404;//402; //385;//403; 
+  double target_ticks = 400;//386;//380;//404;//402; //385;//403; 
 
   right_encoder_val = left_encoder_val = 0;
 
-  md.setSpeeds(-SPEED, -SPEED);
+  md.setSpeeds(-SPEEDL, -SPEEDR);
 
   while(right_encoder_val < target_ticks){
     startPID(); 
@@ -182,11 +182,11 @@ void turnRR(){ //90 R
 }
 
 void turnLR(){ //90 L
-  double target_ticks = 389;//386;//409;//395;//405;//409;
+  double target_ticks = 397;//386;//409;//395;//405;//409;
   
   right_encoder_val = left_encoder_val = 0;
 
-  md.setSpeeds(SPEED, SPEED);
+  md.setSpeeds(SPEEDL, SPEEDR);
 
   while(right_encoder_val < target_ticks){
     startPID(); 
@@ -200,7 +200,7 @@ void turnLR(){ //90 L
 void turnLH(){
   double target_ticks = 787;//815;
   right_encoder_val = 0;
-  md.setSpeeds(SPEED,SPEED);
+  md.setSpeeds(SPEEDL,SPEEDR);
   while(right_encoder_val < target_ticks){
     startPID();
     md.setM1Speed(rpmToSpeedL(inputL + outputL));
@@ -214,7 +214,7 @@ void turnLH(){
 void calL(){
   double target_ticks = 1;
   right_encoder_val = left_encoder_val = 0;
-  md.setSpeeds(SPEED,SPEED);
+  md.setSpeeds(SPEEDL,SPEEDR);
   while(right_encoder_val < target_ticks){}
   md.setBrakes(400,400);
 }
@@ -222,7 +222,7 @@ void calL(){
 void calR(){
   double target_ticks = 1;
   right_encoder_val = left_encoder_val = 0;
-  md.setSpeeds(-SPEED,-SPEED);
+  md.setSpeeds(-SPEEDL,-SPEEDR);
   while(right_encoder_val < target_ticks){}
   md.setBrakes(400,400);
 }
@@ -230,7 +230,7 @@ void calR(){
 void calF(){
   double target_ticks = 1;
   right_encoder_val = 0;
-  md.setSpeeds(SPEED,-SPEED);
+  md.setSpeeds(SPEEDL,-SPEEDR);
   while(right_encoder_val < target_ticks){}
   md.setBrakes(400,400);
 }
@@ -238,7 +238,7 @@ void calF(){
 void calB(){
   double target_ticks = 1;
   right_encoder_val = 0;
-  md.setSpeeds(-SPEED, SPEED);
+  md.setSpeeds(-SPEEDL, SPEEDR);
   while(right_encoder_val < target_ticks){}
   md.setBrakes(400,400);
 }
@@ -333,7 +333,7 @@ void calibrationFB(){
       closestSensor = min(closestSensor, sensorInfo[2]);  
       //Serial.print("B :"); Serial.println(closestSensor);
     }
-    else if(closestSensor <= 19.5 && closestSensor > 16.5){ //too far, move front to 8cm mark
+    else if(closestSensor <= 21.5 && closestSensor > 16.5){ //too far, move front to 8cm mark
       calF();
       getSensorInfo(sensorInfo);
       closestSensor = min(sensorInfo[0],sensorInfo[1]);
@@ -379,7 +379,7 @@ void calibrationFBS(){ //for the start
   closestSensor = min(closestSensor, sensorInfo[2]);
   //Serial.println(closestSensor);
   while(1){
-    if(closestSensor <= 6.5){ //too close, move back to 8cm mark
+    if(closestSensor <= 5.5){ //too close, move back to 8cm mark
       calB();
       getSensorInfo(sensorInfo);
       closestSensor = min(sensorInfo[0],sensorInfo[1]);
