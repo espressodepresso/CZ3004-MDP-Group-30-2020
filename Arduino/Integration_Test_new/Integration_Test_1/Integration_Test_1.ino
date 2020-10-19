@@ -14,7 +14,7 @@
 #define L_encoder 3
 //#define RPM_L 54
 //#define RPM_R 57
-#define SPEEDL 319  
+#define SPEEDL 310 //319  
 #define SPEEDR 255
 #define TICK_PER_CM 20.96//20//25//29.83
 #define TICK_PER_DEG 4//.3
@@ -68,9 +68,10 @@ void setup() {
   PCintPort::attachInterrupt(L_encoder, LeftEncoderInc, RISING);
 
 
-  setpointR = 113.4;//116;
-  //setpointL = speedToRPML(SPEED);
-  setpointL = 125;//120;//119;//117.55; //114.9; //54.3;
+  //setpointR = 113.64; //116;
+  //setpointL = 121.137;//120;//119;//117.55; //114.9; //54.3;
+  setpointR = 111;
+  setpointL = 121;
   myPIDR.SetMode(AUTOMATIC);  
   myPIDL.SetMode(AUTOMATIC);
 //  md.setSpeeds(SPEED,-SPEED); //L,R

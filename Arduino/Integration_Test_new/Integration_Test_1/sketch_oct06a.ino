@@ -86,7 +86,7 @@ void startPID(){
 }
 
 void moveForward(int dist){ //dist in 10 cm
-  double target_ticks = 298 * dist; 
+  double target_ticks = 310 * dist; 
 
   right_encoder_val = left_encoder_val = 0;
 
