@@ -70,7 +70,7 @@ void setup() {
 
   //setpointR = 113.64; //116;
   //setpointL = 121.137;//120;//119;//117.55; //114.9; //54.3;
-  setpointR = 111;
+  setpointR = 105;
   setpointL = 121;
   myPIDR.SetMode(AUTOMATIC);  
   myPIDL.SetMode(AUTOMATIC);
@@ -89,7 +89,9 @@ void loop() {
       {
         moveOne();
         delay(250);
-        //calibrationFB();
+        calibrationFB();
+        calibrationFBA();
+        calibrationLRA();
         //delay(250);
         break;
       }
@@ -97,14 +99,16 @@ void loop() {
       {
         turnLR();
         delay(250);
-        calibrationFB();
+        calibrationLRA();
+        //calibrationFB();
         break;
       }
       case 'R':
       {
         turnRR();
         delay(250);
-        calibrationFB();
+        calibrationLRA();
+        //calibrationFB();
         break;
       }
       case'F':

@@ -166,7 +166,7 @@ void turnR(int deg){
 }*/
 
 void turnRR(){ //90 R
-  double target_ticks = 400;//386;//380;//404;//402; //385;//403; 
+  double target_ticks = 389;//386;//380;//404;//402; //385;//403; 
 
   right_encoder_val = left_encoder_val = 0;
 
@@ -182,7 +182,7 @@ void turnRR(){ //90 R
 }
 
 void turnLR(){ //90 L
-  double target_ticks = 397;//386;//409;//395;//405;//409;
+  double target_ticks = 380;//386;//409;//395;//405;//409;
   
   right_encoder_val = left_encoder_val = 0;
 
@@ -268,6 +268,9 @@ void calibrationLRA(){
   float fl = sensorInfo[3]; //front left
   float bl = sensorInfo[4]; //back left
   float diff = fl - bl; //neg = turn r, pos = turn l
+  if (fl>20||bl>20){
+    return;
+  }
   //Serial.print("initial: "); Serial.println(diff);
   while(1){
     if(diff >= 0.3 && diff <= 9){ //positive error, turn L
@@ -345,6 +348,41 @@ void calibrationFB(){
     }
   }  
 }
+
+void calibrationFBA(){
+  md.setSpeeds(0,0); //stop before calibrating
+  getSensorInfo(sensorInfo);
+  //actualDist();
+  float fl = sensorInfo[0]; //front left
+  float bl = sensorInfo[2]; //back left
+  float diff = fl - bl; //neg = turn r, pos = turn l
+  if (fl>20||bl>20){
+    return;
+  }
+  //Serial.print("initial: "); Serial.println(diff);
+  while(1){
+    if(diff >= 0.3 && diff <= 6){ //positive error, turn L
+      calL();
+      getSensorInfo(sensorInfo);
+      fl = sensorInfo[3]; 
+      bl = sensorInfo[4]; 
+      diff = fl - bl;
+      //Serial.print("+ :"); Serial.println(diff);
+    }
+    else if(diff <= -0.3 && diff >= -6){ //negative error, turn R
+      calR();
+      getSensorInfo(sensorInfo);
+      fl = sensorInfo[3]; 
+      bl = sensorInfo[4]; 
+      diff = fl - bl;
+      //Serial.print("- :"); Serial.println(diff);
+    }
+    else{
+      return;
+    }
+  } 
+}
+
 void calibrationFBF(){//for fastest path
   md.setSpeeds(0,0); //stop before calibrating
   getSensorInfo(sensorInfo);
