@@ -14,8 +14,10 @@
 #define L_encoder 3
 //#define RPM_L 54
 //#define RPM_R 57
-#define SPEEDL 310 //319  
-#define SPEEDR 255
+
+//change SPEED for start off straight
+#define SPEEDL 323 //310 //319  
+#define SPEEDR 295 //255
 #define TICK_PER_CM 20.96//20//25//29.83
 #define TICK_PER_DEG 4//.3
 #define COUNT 50
@@ -31,7 +33,6 @@ int degree;
 unsigned long nowTime = 0; //updated every loop()
 unsigned long startTimeR = 0, startTimeL = 0; 
 unsigned long timeTakenR = 0, timeTakenL = 0;
-//double rpmR = 0, rpmL = 0;
 double inputR = 0, outputR = 0, setpointR;
 double inputL = 0, outputL = 0, setpointL;
 //double kpR = 1, kiR = 0.001, kdR = 0;
@@ -70,8 +71,17 @@ void setup() {
 
   //setpointR = 113.64; //116;
   //setpointL = 121.137;//120;//119;//117.55; //114.9; //54.3;
-  setpointR = 105;//105;
-  setpointL = 119.7;
+
+  //change rpm for sudden change in speed during movement
+
+  //setpoints for moveforward
+  setpointR = 119;//111;
+  setpointL = 128;//121;
+
+  //setpoint for moveone,L,R
+//  setpointR = 120.1;
+//  setpointL = 128;
+  
   myPIDR.SetMode(AUTOMATIC);  
   myPIDL.SetMode(AUTOMATIC);
 //  md.setSpeeds(SPEED,-SPEED); //L,R
@@ -91,16 +101,15 @@ void loop() {
         delay(450);
         calibrationFB();
         calibrationFBA();
-        //calibrationLRA();
-        //delay(250);
+        calibrationLRA();
         break;
       }
       case 'L':
       {
         turnLR();
         delay(450);
-        //calibrationLRA();
-        //calibrationFB();
+        calibrationLRA();
+        calibrationFB();
         break;
       }
       case 'R':
@@ -108,7 +117,7 @@ void loop() {
         turnRR();
         delay(450);
         calibrationLRA();
-        //calibrationFB();
+        calibrationFB();
         break;
       }
       case'F':
@@ -180,11 +189,6 @@ void loop() {
         delay(200);
         break;
       }
-      /*case 'h':
-      {
-        md.setSpeeds(200,-200);
-        delay(2000);
-      }*/
     }
     inputCmd.remove(0,1);   
     }    
