@@ -4,12 +4,12 @@ void sensorToRpi(){
   for (int i=0;i<6;++i){   
     //L sensors return 0 blocks for dist <20
     if(i==3||i==4){
-      sensorInfo[i]=sensorInfo[i]-5;
-      if((sensorInfo[i]>5)&&(sensorInfo[i]<12)){
+      //sensorInfo[i]=sensorInfo[i]-5;
+      if((sensorInfo[i]>5)&&(sensorInfo[i]<13)){
         blockDist[i]=0;
       }
       else{
-          blockDist[i] = sensorInfo[i]/10;
+          blockDist[i] = sensorInfo[i]/10-1;
         }
     }
 
@@ -30,11 +30,17 @@ void sensorToRpi(){
           blockDist[i] = 0;
         }
       else{
-        sensorInfo[i]=sensorInfo[i]-2.5;
+        sensorInfo[i]=sensorInfo[i];
         blockDist[i] = sensorInfo[i]/10;
       }
     }
 
+
+    if (i==3||i==4){
+      if (blockDist[i]>2){
+        blockDist[i]=2;
+      }
+    }
     //Long range sensor
     if(i!=5){
       if (blockDist[i]>3){
@@ -79,6 +85,7 @@ void getSensorInfo(float sensorInfo[]){
 
 //MOVEMENT
 void startPID(){
+  myPIDR.SetTunings(kpR,kiR,kdR);
   inputL = calcRPML();
   inputR = calcRPMR();
   myPIDL.Compute();
@@ -102,7 +109,7 @@ void moveForward(int dist){ //dist in 10 cm
 }
 
 void moveOne(){
-  double target_ticks = 295;//282; 
+  double target_ticks = 288;//282; 
 
   right_encoder_val = 0;
 
@@ -166,7 +173,7 @@ void turnR(int deg){
 }*/
 
 void turnRR(){ //90 R
-  double target_ticks = 389;//386;//380;//404;//402; //385;//403; 
+  double target_ticks = 391;//386;//380;//404;//402; //385;//403; 
 
   right_encoder_val = left_encoder_val = 0;
 
@@ -182,7 +189,7 @@ void turnRR(){ //90 R
 }
 
 void turnLR(){ //90 L
-  double target_ticks = 380;//386;//409;//395;//405;//409;
+  double target_ticks = 391;//386;//409;//395;//405;//409;
   
   right_encoder_val = left_encoder_val = 0;
 
@@ -266,7 +273,7 @@ void calibrationLRA(){
   getSensorInfo(sensorInfo);
   //actualDist();
   float fl = sensorInfo[3]; //front left
-  float bl = sensorInfo[4]; //back left
+  float bl = sensorInfo[4]+0.3; //back left
   float diff = fl - bl; //neg = turn r, pos = turn l
   if (fl>20||bl>20){
     return;
@@ -311,11 +318,15 @@ void calibrationLRD(){
 void calibrationFB(){
   md.setSpeeds(0,0); //stop before calibrating
   getSensorInfo(sensorInfo);
+  if (sensorInfo[0]>22&&sensorInfo[1]>22||sensorInfo[1]>22&&sensorInfo[2]>22){
+    return;
+  }
+  
   float closestSensor = min(sensorInfo[0],sensorInfo[1]);
   closestSensor = min(closestSensor, sensorInfo[2]);
   //Serial.println(closestSensor);
   while(1){
-    if(closestSensor <= 6.5){ //too close, move back to 8cm mark
+    if(closestSensor <= 6.0){ //too close, move back to 8cm mark
       calB();
       getSensorInfo(sensorInfo);
       closestSensor = min(sensorInfo[0],sensorInfo[1]);

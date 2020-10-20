@@ -70,8 +70,8 @@ void setup() {
 
   //setpointR = 113.64; //116;
   //setpointL = 121.137;//120;//119;//117.55; //114.9; //54.3;
-  setpointR = 105;
-  setpointL = 121;
+  setpointR = 105;//105;
+  setpointL = 119.7;
   myPIDR.SetMode(AUTOMATIC);  
   myPIDL.SetMode(AUTOMATIC);
 //  md.setSpeeds(SPEED,-SPEED); //L,R
@@ -88,25 +88,25 @@ void loop() {
       case 'W':
       {
         moveOne();
-        delay(250);
+        delay(450);
         calibrationFB();
         calibrationFBA();
-        calibrationLRA();
+        //calibrationLRA();
         //delay(250);
         break;
       }
       case 'L':
       {
         turnLR();
-        delay(250);
-        calibrationLRA();
+        delay(450);
+        //calibrationLRA();
         //calibrationFB();
         break;
       }
       case 'R':
       {
         turnRR();
-        delay(250);
+        delay(450);
         calibrationLRA();
         //calibrationFB();
         break;
@@ -114,7 +114,7 @@ void loop() {
       case'F':
       {
         calibrationFB();
-        delay(250);
+        delay(450);
         break;
       }
       case 'U':
@@ -126,7 +126,7 @@ void loop() {
       case 'C':
       {
         calibrationLRD();
-        delay(250);
+        delay(450);
         Serial.println("calibration done");
         break;
       }
@@ -150,7 +150,7 @@ void loop() {
       case 'e':
       {
         turnLH();
-        delay(250);
+        delay(350);
         break;
       } 
       case 'Y':
@@ -180,6 +180,11 @@ void loop() {
         delay(200);
         break;
       }
+      /*case 'h':
+      {
+        md.setSpeeds(200,-200);
+        delay(2000);
+      }*/
     }
     inputCmd.remove(0,1);   
     }    

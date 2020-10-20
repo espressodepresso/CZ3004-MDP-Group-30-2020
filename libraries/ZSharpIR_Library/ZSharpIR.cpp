@@ -93,7 +93,7 @@ float ZSharpIR::distance() {
         // Different expressions required as the Photon has 12 bit ADCs vs 10 bit for Arduinos
         //puntualDistance = 27.728 * pow(voltFromRaw / 1000., -1.2045);
         //distanceMM =( 27.728 * pow(map(ir_val[NB_SAMPLE / 2], 0, (1<<_Adcres)-1, 0, _refVoltage)/1000.0, -1.2045));
-        distanceMM = 6837.8*pow(ir_val[NB_SAMPLE / 2],-1.051);
+        distanceMM = 13226*pow(ir_val[NB_SAMPLE / 2],-1.183);
 
     } 
     else if (_model==A5)//FL
@@ -103,7 +103,7 @@ float ZSharpIR::distance() {
         // Different expressions required as the Photon has 12 bit ADCs vs 10 bit for Arduinos
         //puntualDistance = 27.728 * pow(voltFromRaw / 1000., -1.2045);
         //distanceMM =( 27.728 * pow(map(ir_val[NB_SAMPLE / 2], 0, (1<<_Adcres)-1, 0, _refVoltage)/1000.0, -1.2045));
-        distanceMM = 20691*pow(ir_val[NB_SAMPLE/2],-1.254);
+        distanceMM = 17220*pow(ir_val[NB_SAMPLE/2],-1.22);
     }     
 
     else if (_model==A3)//LF
@@ -113,7 +113,7 @@ float ZSharpIR::distance() {
         // Different expressions required as the Photon has 12 bit ADCs vs 10 bit for Arduinos
         //puntualDistance = 27.728 * pow(voltFromRaw / 1000., -1.2045);
         //distanceMM =( 27.728 * pow(map(ir_val[NB_SAMPLE / 2], 0, (1<<_Adcres)-1, 0, _refVoltage)/1000.0, -1.2045));
-        distanceMM = 12366*pow(ir_val[NB_SAMPLE / 2],-1.147);
+        distanceMM = 36232*pow(ir_val[NB_SAMPLE / 2],-1.354);
     } 
     else if (_model==A4)//FM
 		{
@@ -122,7 +122,7 @@ float ZSharpIR::distance() {
         // Different expressions required as the Photon has 12 bit ADCs vs 10 bit for Arduinos
         //puntualDistance = 27.728 * pow(voltFromRaw / 1000., -1.2045);
         //distanceMM =( 27.728 * pow(map(ir_val[NB_SAMPLE / 2], 0, (1<<_Adcres)-1, 0, _refVoltage)/1000.0, -1.2045))+1.5;
-        distanceMM = 25440*pow(ir_val[NB_SAMPLE / 2],-1.302);
+        distanceMM = 22263*pow(ir_val[NB_SAMPLE / 2],-1.25);
     } 
     else if (_model==A2)//FR
 		{
@@ -132,7 +132,7 @@ float ZSharpIR::distance() {
         //puntualDistance = 27.728 * pow(voltFromRaw / 1000., -1.2045);
         //distanceMM =( 27.728 * pow(map(ir_val[NB_SAMPLE / 2], 0, (1<<_Adcres)-1, 0, _refVoltage)/1000.0, -1.2045));
         //taken at 6.1V
-        distanceMM = 79911*pow(ir_val[NB_SAMPLE / 2],-1.473);    
+        distanceMM = 23889*pow(ir_val[NB_SAMPLE / 2],-1.26);    
     } 
     
 
