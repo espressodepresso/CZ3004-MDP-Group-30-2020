@@ -100,29 +100,29 @@ void loop() {
         moveOne();
         delay(450);
         ////calibrationFBA();
-        //calibrationFB();
-        //calibrationLRA();
+        calibrationFB();
+        calibrationLRA();
         break;
       }
       case 'L':
       {
         turnLR();
         delay(450);
-        //calibrationFB();
-        //calibrationLRA();
+        calibrationFB();
+        calibrationLRA();
         break;
       }
       case 'R':
       {
         turnRR();
         delay(450);
-        //calibrationFB();
-        //calibrationLRA();
+        calibrationFB();
+        calibrationLRA();
         break;
       }
       case'F':
       {
-        calibrationFBA();
+        //calibrationFBA();
         calibrationFB();
         delay(450);
         break;
