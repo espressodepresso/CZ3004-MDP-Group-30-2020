@@ -122,7 +122,7 @@ void loop() {
       }
       case'F':
       {
-        //calibrationFBA();
+        calibrationFBA();
         calibrationFB();
         delay(450);
         break;
