@@ -75,7 +75,7 @@ void setup() {
   //change rpm for sudden change in speed during movement
 
   //setpoints for moveforward
-  setpointR = 125;//119; (20)
+  setpointR = 123.8;//119; (20)
   setpointL = 128;
 
   //setpoint for moveone,L,R
@@ -99,25 +99,25 @@ void loop() {
       {
         moveOne();
         delay(450);
-        //calibrationFBA();
-        calibrationFB();
-        calibrationLRA();
+        ////calibrationFBA();
+        //calibrationFB();
+        //calibrationLRA();
         break;
       }
       case 'L':
       {
         turnLR();
         delay(450);
-        calibrationFB();
-        calibrationLRA();
+        //calibrationFB();
+        //calibrationLRA();
         break;
       }
       case 'R':
       {
         turnRR();
         delay(450);
-        calibrationFB();
-        calibrationLRA();
+        //calibrationFB();
+        //calibrationLRA();
         break;
       }
       case'F':
