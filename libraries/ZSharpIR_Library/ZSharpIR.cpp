@@ -122,7 +122,7 @@ float ZSharpIR::distance() {
         // Different expressions required as the Photon has 12 bit ADCs vs 10 bit for Arduinos
         //puntualDistance = 27.728 * pow(voltFromRaw / 1000., -1.2045);
         //distanceMM =( 27.728 * pow(map(ir_val[NB_SAMPLE / 2], 0, (1<<_Adcres)-1, 0, _refVoltage)/1000.0, -1.2045))+1.5;
-        distanceMM = 6862.5*(ir_val[NB_SAMPLE / 2])-5.6603;
+        distanceMM = 57328*pow(ir_val[NB_SAMPLE / 2],-1.429);
     } 
     else if (_model==A2)//FR
 		{

@@ -75,7 +75,7 @@ void setup() {
   //change rpm for sudden change in speed during movement
 
   //setpoints for moveforward
-  setpointR = 123;//119; (20)
+  setpointR = 120.48;//119; (20)
   setpointL = 128;
 
   //setpoint for moveone,L,R
@@ -90,7 +90,19 @@ void setup() {
 }
 
 void loop() {
-
+  
+//  moveForward(9);
+//  delay(450);
+//  turnRR();
+//  delay(450);
+//  turnRR();
+//  delay(450);
+//  moveForward(9);
+//  delay(450);
+//  turnLR();
+//  delay(450);
+//  turnLR();
+//  delay(1000);  
   inputCmd = Serial.readStringUntil('@');
   while (!(inputCmd == NULL)){
     //Serial.println("loop");
@@ -99,7 +111,7 @@ void loop() {
       {
         moveOne();
         delay(450);
-        ////calibrationFBA();
+        calibrationFBA();
         calibrationFB();
         calibrationLRA();
         break;
@@ -108,21 +120,23 @@ void loop() {
       {
         turnLR();
         delay(450);
-        calibrationFB();
-        calibrationLRA();
+//        calibrationFBA();
+//        calibrationFB();
+//        calibrationLRA();
         break;
       }
       case 'R':
       {
         turnRR();
         delay(450);
-        calibrationFB();
-        calibrationLRA();
+        //calibrationFBA();
+        //calibrationFB();
+        //calibrationLRA();
         break;
       }
       case'F':
       {
-        //calibrationFBA();
+        calibrationFBA();
         calibrationFB();
         delay(450);
         break;
@@ -192,5 +206,5 @@ void loop() {
       }
     }
     inputCmd.remove(0,1);   
-    }    
+    }   
 }
