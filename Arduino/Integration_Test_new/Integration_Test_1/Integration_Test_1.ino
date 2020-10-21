@@ -17,7 +17,7 @@
 
 //change SPEED for start off straight
 #define SPEEDL 319 //310 //319  
-#define SPEEDR 297 //255
+#define SPEEDR 295 //255
 #define TICK_PER_CM 20.96//20//25//29.83
 #define TICK_PER_DEG 4//.3
 #define COUNT 50
@@ -75,7 +75,7 @@ void setup() {
   //change rpm for sudden change in speed during movement
 
   //setpoints for moveforward
-  setpointR = 120.48;//119; (20)
+  setpointR = 118.4;//119; (20)
   setpointL = 128;
 
   //setpoint for moveone,L,R
@@ -91,18 +91,37 @@ void setup() {
 
 void loop() {
   
-//  moveForward(9);
+//  moveForward(8);
 //  delay(450);
 //  turnRR();
 //  delay(450);
 //  turnRR();
 //  delay(450);
-//  moveForward(9);
+//  moveForward(8);
 //  delay(450);
 //  turnLR();
 //  delay(450);
 //  turnLR();
 //  delay(1000);  
+
+//  turnRR();
+//  delay(450);
+//  turnRR();
+//  delay(450)
+//  turnRR();
+//  delay(450);
+//  turnRR();
+//  delay(450);
+
+ /* turnLR();
+  delay(450);
+  turnLR();
+  delay(450)
+  turnLR();
+  delay(450);
+  turnLR();
+  delay(450);*/
+  
   inputCmd = Serial.readStringUntil('@');
   while (!(inputCmd == NULL)){
     //Serial.println("loop");
@@ -120,18 +139,18 @@ void loop() {
       {
         turnLR();
         delay(450);
-//        calibrationFBA();
-//        calibrationFB();
-//        calibrationLRA();
+        calibrationFBA();
+        calibrationFB();
+        calibrationLRA();
         break;
       }
       case 'R':
       {
         turnRR();
         delay(450);
-        //calibrationFBA();
-        //calibrationFB();
-        //calibrationLRA();
+        calibrationFBA();
+        calibrationFB();
+        calibrationLRA();
         break;
       }
       case'F':

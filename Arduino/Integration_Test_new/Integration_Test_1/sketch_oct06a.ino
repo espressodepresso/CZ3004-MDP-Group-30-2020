@@ -173,7 +173,7 @@ void turnR(int deg){
 }*/
 
 void turnRR(){ //90 R
-  double target_ticks = 383;//386;//380;//404;//402; //385;//403; 
+  double target_ticks = 380;//386;//380;//404;//402; //385;//403; 
 
   right_encoder_val = left_encoder_val = 0;
 
@@ -189,7 +189,7 @@ void turnRR(){ //90 R
 }
 
 void turnLR(){ //90 L
-  double target_ticks = 388;//386;//409;//395;//405;//409;
+  double target_ticks = 386;//386;//409;//395;//405;//409;
   
   right_encoder_val = left_encoder_val = 0;
 
