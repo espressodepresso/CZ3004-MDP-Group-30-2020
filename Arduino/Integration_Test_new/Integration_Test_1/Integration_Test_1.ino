@@ -16,7 +16,7 @@
 //#define RPM_R 57
 
 //change SPEED for start off straight
-#define SPEEDL 323 //310 //319  
+#define SPEEDL 319 //310 //319  
 #define SPEEDR 297 //255
 #define TICK_PER_CM 20.96//20//25//29.83
 #define TICK_PER_DEG 4//.3
@@ -75,7 +75,7 @@ void setup() {
   //change rpm for sudden change in speed during movement
 
   //setpoints for moveforward
-  setpointR = 123.8;//119; (20)
+  setpointR = 123;//119; (20)
   setpointL = 128;
 
   //setpoint for moveone,L,R
