@@ -9,8 +9,9 @@ void sensorToRpi(){
         blockDist[i]=0;
       }
       else{
-          blockDist[i] = sensorInfo[i]/10-1;
-        }
+        sensorInfo[i] = sensorInfo[i]-6;
+        blockDist[i] = sensorInfo[i]/10;
+      }
     }
 
     if(i==5){
@@ -273,7 +274,7 @@ void calibrationLRA(){
   getSensorInfo(sensorInfo);
   //actualDist();
   float fl = sensorInfo[3]; //front left
-  float bl = sensorInfo[4]+1.5; //back left
+  float bl = sensorInfo[4]; //back left
   float diff = fl - bl; //neg = turn r, pos = turn l
   if (fl>20||bl>20){
     return;
@@ -284,7 +285,7 @@ void calibrationLRA(){
       calL();
       getSensorInfo(sensorInfo);
       fl = sensorInfo[3]; 
-      bl = sensorInfo[4]+1.5; 
+      bl = sensorInfo[4]; 
       diff = fl - bl;
       //Serial.print("+ :"); Serial.println(diff);
     }
@@ -292,7 +293,7 @@ void calibrationLRA(){
       calR();
       getSensorInfo(sensorInfo);
       fl = sensorInfo[3]; 
-      bl = sensorInfo[4]+1.5; 
+      bl = sensorInfo[4]; 
       diff = fl - bl;
       //Serial.print("- :"); Serial.println(diff);
     }
@@ -306,7 +307,7 @@ void calibrationFBA(){
   md.setSpeeds(0,0); //stop before calibrating
   getSensorInfo(sensorInfo);
   //actualDist();
-  float fl = sensorInfo[0]+0.8; //front left
+  float fl = sensorInfo[0]; //front left
   float fr = sensorInfo[2]; //front right
   float diff = fl - fr; 
   if (fl>18||fr>18){
@@ -314,18 +315,18 @@ void calibrationFBA(){
   }
   //Serial.print("initial: "); Serial.println(diff);
   while(1){
-    if(diff >= 0.4 && diff <= 8){ //positive error, turn L
+    if(diff >= 0.4 && diff <= 6.5){ //positive error, turn L
       calR();
       getSensorInfo(sensorInfo);
-      fl = sensorInfo[0]+0.8; 
+      fl = sensorInfo[0]; 
       fr = sensorInfo[2]; 
       diff = fl - fr;
       //Serial.print("+ :"); Serial.println(diff);
     }
-    else if(diff <= -0.4 && diff >= -8){ //negative error, turn R
+    else if(diff <= -0.4 && diff >= -6.5){ //negative error, turn R
       calL();
       getSensorInfo(sensorInfo);
-      fl = sensorInfo[0]+0.8; 
+      fl = sensorInfo[0]; 
       fr = sensorInfo[2]; 
       diff = fl - fr;
       //Serial.print("- :"); Serial.println(diff);
