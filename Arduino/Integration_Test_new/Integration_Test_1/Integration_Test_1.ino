@@ -74,9 +74,9 @@ void setup() {
 
   //change rpm for sudden change in speed during movement
 
-  //setpoints for moveforward
-  setpointR = 118.4;//119; (20)
-  setpointL = 128;
+  //setpoints BATT 20 6.22V
+  setpointR = 124;//118.4;//119; (20)
+  setpointL = 128;//128;
 
   //setpoint for moveone,L,R
 //  setpointR = 120.1;
