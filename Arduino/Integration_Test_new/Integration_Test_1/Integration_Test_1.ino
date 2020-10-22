@@ -77,13 +77,7 @@ void setup() {
   //setpoints BATT 20 6.22V
 //  setpointR = 124;//118.4;//119; (20)
 //  setpointL = 128;//128;
-
-<<<<<<< Updated upstream
-  //setpointS FOR BATT 21 6.30/1V
-  setpointR = 122;
-  setpointL = 128;
-=======
-<<<<<<< HEAD
+  
   //SETPOINTS batt 20 6.28V
   setpointR = 118;
   setpointL = 120;  
@@ -91,12 +85,10 @@ void setup() {
   //setpointS FOR BATT 21 6.31V
 //  setpointR = 125;
 //  setpointL = 128;
-=======
-  //setpointS FOR BATT 21 6.30/1V
-  setpointR = 122;
-  setpointL = 128;
->>>>>>> 28ac495e2d1458f45f3f359e0f5b045577999969
->>>>>>> Stashed changes
+
+//  //setpointS FOR BATT 21 6.30/1V
+//  setpointR = 122;
+//  setpointL = 128;
   
   myPIDR.SetMode(AUTOMATIC);  
   myPIDL.SetMode(AUTOMATIC);
@@ -146,27 +138,27 @@ void loop() {
       {
         moveOne();
         delay(450);
-//        calibrationFBA();
-//        calibrationFB();
-//        calibrationLRA();
+        calibrationFBA();
+        calibrationFB();
+        calibrationLRA();
         break;
       }
       case 'L':
       {
         turnLR();
         delay(450);
-//        calibrationFBA();
-//        calibrationFB();
-//        calibrationLRA();
+        calibrationFBA();
+        calibrationFB();
+        calibrationLRA();
         break;
       }
       case 'R':
       {
         turnRR();
         delay(450);
-//        calibrationFBA();
-//        calibrationFB();
-//        calibrationLRA();
+        calibrationFBA();
+        calibrationFB();
+        calibrationLRA();
         break;
       }
       case'F':
