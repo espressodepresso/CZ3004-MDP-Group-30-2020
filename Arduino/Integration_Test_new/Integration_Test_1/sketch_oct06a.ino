@@ -31,7 +31,7 @@ void sensorToRpi(){
           blockDist[i] = 0;
         }
       else{
-        sensorInfo[i]=sensorInfo[i]-5;
+        sensorInfo[i]=sensorInfo[i]-3;
         blockDist[i] = sensorInfo[i]/10;
       }
     }
