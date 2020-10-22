@@ -174,7 +174,15 @@ void turnR(int deg){
 }*/
 
 void turnRR(){ //90 R
+<<<<<<< Updated upstream
   double target_ticks = 377;//386;//380;//404;//402; //385;//403; 
+=======
+<<<<<<< HEAD
+  double target_ticks = 378;//386;//380;//404;//402; //385;//403; 
+=======
+  double target_ticks = 377;//386;//380;//404;//402; //385;//403; 
+>>>>>>> 28ac495e2d1458f45f3f359e0f5b045577999969
+>>>>>>> Stashed changes
 
   right_encoder_val = left_encoder_val = 0;
 
@@ -190,7 +198,16 @@ void turnRR(){ //90 R
 }
 
 void turnLR(){ //90 L
+<<<<<<< Updated upstream
   double target_ticks = 382;//386;//409;//395;//405;//409;  
+=======
+<<<<<<< HEAD
+  double target_ticks = 383;//386;//409;//395;//405;//409;
+  
+=======
+  double target_ticks = 382;//386;//409;//395;//405;//409;  
+>>>>>>> 28ac495e2d1458f45f3f359e0f5b045577999969
+>>>>>>> Stashed changes
   right_encoder_val = left_encoder_val = 0;
 
   md.setSpeeds(SPEEDL, SPEEDR);
