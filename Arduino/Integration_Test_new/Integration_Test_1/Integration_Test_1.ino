@@ -75,12 +75,12 @@ void setup() {
   //change rpm for sudden change in speed during movement
 
   //setpoints BATT 20 6.22V
-  setpointR = 124;//118.4;//119; (20)
-  setpointL = 128;//128;
+//  setpointR = 124;//118.4;//119; (20)
+//  setpointL = 128;//128;
 
-  //setpoint for moveone,L,R
-//  setpointR = 120.1;
-//  setpointL = 128;
+  //setpointS FOR BATT 21 6.30/1V
+  setpointR = 122;
+  setpointL = 128;
   
   myPIDR.SetMode(AUTOMATIC);  
   myPIDL.SetMode(AUTOMATIC);
@@ -130,27 +130,27 @@ void loop() {
       {
         moveOne();
         delay(450);
-        calibrationFBA();
-        calibrationFB();
-        calibrationLRA();
+//        calibrationFBA();
+//        calibrationFB();
+//        calibrationLRA();
         break;
       }
       case 'L':
       {
         turnLR();
         delay(450);
-        calibrationFBA();
-        calibrationFB();
-        calibrationLRA();
+//        calibrationFBA();
+//        calibrationFB();
+//        calibrationLRA();
         break;
       }
       case 'R':
       {
         turnRR();
         delay(450);
-        calibrationFBA();
-        calibrationFB();
-        calibrationLRA();
+//        calibrationFBA();
+//        calibrationFB();
+//        calibrationLRA();
         break;
       }
       case'F':

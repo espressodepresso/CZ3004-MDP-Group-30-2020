@@ -31,7 +31,7 @@ void sensorToRpi(){
           blockDist[i] = 0;
         }
       else{
-        sensorInfo[i]=sensorInfo[i]-3;
+        sensorInfo[i]=sensorInfo[i]-5;
         blockDist[i] = sensorInfo[i]/10;
       }
     }
@@ -174,7 +174,7 @@ void turnR(int deg){
 }*/
 
 void turnRR(){ //90 R
-  double target_ticks = 379;//386;//380;//404;//402; //385;//403; 
+  double target_ticks = 377;//386;//380;//404;//402; //385;//403; 
 
   right_encoder_val = left_encoder_val = 0;
 
@@ -190,8 +190,7 @@ void turnRR(){ //90 R
 }
 
 void turnLR(){ //90 L
-  double target_ticks = 385;//386;//409;//395;//405;//409;
-  
+  double target_ticks = 382;//386;//409;//395;//405;//409;  
   right_encoder_val = left_encoder_val = 0;
 
   md.setSpeeds(SPEEDL, SPEEDR);
