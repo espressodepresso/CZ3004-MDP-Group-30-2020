@@ -17,6 +17,7 @@
 
 //change SPEED for start off straight
 #define SPEEDL 323//319 (21, 6.31V) //310 //319  
+#define SPEEDR 280//295 (21, 6.31V) //255
 #define TICK_PER_CM 20.96//20//25//29.83
 #define TICK_PER_DEG 4//.3
 #define COUNT 50
@@ -40,7 +41,6 @@ double inputL = 0, outputL = 0, setpointL;
 //double kpL = 1.05, kiL = 0.0022, kdL = 0.004;
 //double kpL = 1.07, kiL = 0, kdL = 0;
 //double kpL = 1.07, kiL = 0, kdL = 0.001;
-double kpL = 0.5, kiL = 0, kdL = 0;
 double kpR = 0.49, kiR = 0, kdR = 0;
 double kpL = 0.47, kiL = 0, kdL = 0;
 int deg; int dist;
