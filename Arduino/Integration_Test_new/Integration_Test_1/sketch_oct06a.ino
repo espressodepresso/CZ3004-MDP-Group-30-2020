@@ -5,7 +5,7 @@ void sensorToRpi(){
     //L sensors return 0 blocks for dist <20
     if(i==3||i==4){
       //sensorInfo[i]=sensorInfo[i]-5;
-      if((sensorInfo[i]>5)&&(sensorInfo[i]<13)){
+      if((sensorInfo[i]>5)&&(sensorInfo[i]<16)){
         blockDist[i]=0;
       }
       else{
@@ -110,7 +110,7 @@ void moveForward(int dist){ //dist in 10 cm
 }
 
 void moveOne(){
-  double target_ticks = 287;//282; 
+  double target_ticks = 289;//282; 
 
   right_encoder_val = 0;
 
@@ -174,7 +174,7 @@ void turnR(int deg){
 }*/
 
 void turnRR(){ //90 R
-  double target_ticks = 377;//386;//380;//404;//402; //385;//403; 
+  double target_ticks = 390;//378;//386;//380;//404;//402; //385;//403; 
 
   right_encoder_val = left_encoder_val = 0;
 
@@ -191,7 +191,7 @@ void turnRR(){ //90 R
 
 void turnLR(){ //90 L
 
-  double target_ticks = 382;//386;//409;//395;//405;//409;  
+  double target_ticks = 398;//383;//386;//409;//395;//405;//409;  
 
   right_encoder_val = left_encoder_val = 0;
 
@@ -275,7 +275,7 @@ void calibrationLRA(){
   getSensorInfo(sensorInfo);
   //actualDist();
   float fl = sensorInfo[3]; //front left
-  float bl = sensorInfo[4]; //back left
+  float bl = sensorInfo[4];//+0.6; //back left
   float diff = fl - bl; //neg = turn r, pos = turn l
   if (fl>20||bl>20){
     return;
@@ -286,7 +286,7 @@ void calibrationLRA(){
       calL();
       getSensorInfo(sensorInfo);
       fl = sensorInfo[3]; 
-      bl = sensorInfo[4]; 
+      bl = sensorInfo[4];//+0.6; 
       diff = fl - bl;
       //Serial.print("+ :"); Serial.println(diff);
     }
@@ -294,7 +294,7 @@ void calibrationLRA(){
       calR();
       getSensorInfo(sensorInfo);
       fl = sensorInfo[3]; 
-      bl = sensorInfo[4]; 
+      bl = sensorInfo[4];//+0.6; 
       diff = fl - bl;
       //Serial.print("- :"); Serial.println(diff);
     }
@@ -309,7 +309,7 @@ void calibrationFBA(){
   getSensorInfo(sensorInfo);
   //actualDist();
   float fl = sensorInfo[0]; //front left
-  float fr = sensorInfo[2]; //front right
+  float fr = sensorInfo[2]+0.3; //front right
   float diff = fl - fr; 
   if (fl>18||fr>18){
     return;
@@ -320,7 +320,7 @@ void calibrationFBA(){
       calR();
       getSensorInfo(sensorInfo);
       fl = sensorInfo[0]; 
-      fr = sensorInfo[2]; 
+      fr = sensorInfo[2]+0.3; 
       diff = fl - fr;
       //Serial.print("+ :"); Serial.println(diff);
     }
@@ -328,7 +328,7 @@ void calibrationFBA(){
       calL();
       getSensorInfo(sensorInfo);
       fl = sensorInfo[0]; 
-      fr = sensorInfo[2]; 
+      fr = sensorInfo[2]+0.3; 
       diff = fl - fr;
       //Serial.print("- :"); Serial.println(diff);
     }

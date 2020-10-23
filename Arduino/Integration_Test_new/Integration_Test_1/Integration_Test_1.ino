@@ -16,7 +16,7 @@
 //#define RPM_R 57
 
 //change SPEED for start off straight
-#define SPEEDL 323//319 (21, 6.31V) //310 //319  
+#define SPEEDL 323//323//319 (21, 6.31V) //310 //319  
 #define SPEEDR 280//295 (21, 6.31V) //255
 #define TICK_PER_CM 20.96//20//25//29.83
 #define TICK_PER_DEG 4//.3
@@ -79,15 +79,15 @@ void setup() {
 //  setpointL = 128;//128;
   
   //SETPOINTS batt 20 6.28V
-  setpointR = 118;
+  setpointR = 120;
   setpointL = 120;  
 
-  //setpointS FOR BATT 21 6.31V
-//  setpointR = 125;
-//  setpointL = 128;
+////  setpointS FOR BATT 21 6.31V
+////  setpointR = 122;
+////  setpointL = 128;
 
-//  //setpointS FOR BATT 21 6.30/1V
-//  setpointR = 122;
+//  //setpointS FOR BATT 21 6.18V
+//  setpointR = 130.5;//128.5;//122;
 //  setpointL = 128;
   
   myPIDR.SetMode(AUTOMATIC);  
@@ -138,27 +138,27 @@ void loop() {
       {
         moveOne();
         delay(450);
-        calibrationFBA();
-        calibrationFB();
-        calibrationLRA();
+//        calibrationFBA();
+//        calibrationFB();
+//        calibrationLRA();
         break;
       }
       case 'L':
       {
         turnLR();
         delay(450);
-        calibrationFBA();
-        calibrationFB();
-        calibrationLRA();
+//        calibrationFBA();
+//        calibrationFB();
+//        calibrationLRA();
         break;
       }
       case 'R':
       {
         turnRR();
         delay(450);
-        calibrationFBA();
-        calibrationFB();
-        calibrationLRA();
+//        calibrationFBA();
+//        calibrationFB();
+//        calibrationLRA();
         break;
       }
       case'F':
