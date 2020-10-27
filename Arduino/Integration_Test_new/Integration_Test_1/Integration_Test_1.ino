@@ -138,27 +138,27 @@ void loop() {
       {
         moveOne();
         delay(450);
-//        calibrationFBA();
-//        calibrationFB();
-//        calibrationLRA();
+        calibrationFBA();
+        calibrationFB();
+        calibrationLRA();
         break;
       }
       case 'L':
       {
         turnLR();
         delay(450);
-//        calibrationFBA();
-//        calibrationFB();
-//        calibrationLRA();
+        calibrationFBA();
+        calibrationFB();
+        calibrationLRA();
         break;
       }
       case 'R':
       {
         turnRR();
         delay(450);
-//        calibrationFBA();
-//        calibrationFB();
-//        calibrationLRA();
+        calibrationFBA();
+        calibrationFB();
+        calibrationLRA();
         break;
       }
       case'F':
