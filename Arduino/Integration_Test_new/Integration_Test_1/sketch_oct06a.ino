@@ -4,7 +4,6 @@ void sensorToRpi(){
   for (int i=0;i<6;++i){   
     //L sensors return 0 blocks for dist <20
     if(i==3||i==4){
-      //sensorInfo[i]=sensorInfo[i]-5;
       if((sensorInfo[i]>5)&&(sensorInfo[i]<16)){
         blockDist[i]=0;
       }
@@ -21,7 +20,6 @@ void sensorToRpi(){
       }
       else{
         blockDist[i] = sensorInfo[i]/10;
-        //blockDist[i]=5;
       }      
     }
     //tldr round to closest block
@@ -86,7 +84,6 @@ void getSensorInfo(float sensorInfo[]){
 
 //MOVEMENT
 void startPID(){
-  //myPIDR.SetTunings(kpR,kiR,kdR);
   inputL = calcRPML();
   inputR = calcRPMR();
   myPIDL.Compute();
@@ -106,11 +103,10 @@ void moveForward(int dist){ //dist in 10 cm
     md.setM2Speed(-rpmToSpeedR(inputR + outputR));
   }
   md.setBrakes(400,400);
-  //delay(1000);
 }
 
 void moveOne(){
-  double target_ticks = 290;//282; 
+  double target_ticks = 290;
 
   right_encoder_val = 0;
 
@@ -125,56 +121,8 @@ void moveOne(){
   md.setBrakes(400,400);
 }
 
-/*void moveBack(int dist){ //dist in cm
-  double target_ticks = TICK_PER_CM * dist; 
-
-  right_encoder_val = left_encoder_val = 0;
-
-  md.setSpeeds(-SPEED, SPEED);
-
-  while(right_encoder_val < target_ticks){
-    startPID();  
-    md.setM1Speed(-rpmToSpeedL(inputL + outputL));
-    md.setM2Speed(rpmToSpeedR(inputR + outputR));
-  }
-  md.setBrakes(400,400);
-  //delay(1000);
-}
-
-void turnL(int deg){
-  double target_ticks = TICK_PER_DEG * deg;
-
-  right_encoder_val = left_encoder_val = 0;
-
-  md.setSpeeds(SPEED, SPEED);
-
-  while(right_encoder_val < target_ticks){
-    startPID(); 
-    md.setM1Speed(rpmToSpeedL(inputL + outputL));
-    md.setM2Speed(rpmToSpeedR(inputR + outputR));
-  }
-  md.setBrakes(400,400);
-  //delay(1000);
-}
-
-void turnR(int deg){
-  double target_ticks = TICK_PER_DEG * deg; 
-
-  right_encoder_val = left_encoder_val = 0;
-
-  md.setSpeeds(-SPEED, -SPEED);
-
-  while(right_encoder_val < target_ticks){ 
-    startPID();
-    md.setM1Speed(-rpmToSpeedL(inputL + outputL));
-    md.setM2Speed(-rpmToSpeedR(inputR + outputR));
-  }
-  md.setBrakes(400,400);
-  //delay(1000);
-}*/
-
 void turnRR(){ //90 R
-  double target_ticks = 393;//378;//386;//380;//404;//402; //385;//403; 
+  double target_ticks = 393; 
 
   right_encoder_val = left_encoder_val = 0;
 
@@ -186,12 +134,11 @@ void turnRR(){ //90 R
     md.setM2Speed(-rpmToSpeedR(inputR + outputR));
   }
   md.setBrakes(400,400);
-  //delay(250);
 }
 
 void turnLR(){ //90 L
 
-  double target_ticks = 399;//383;//386;//409;//395;//405;//409;  
+  double target_ticks = 399;
 
   right_encoder_val = left_encoder_val = 0;
 
@@ -203,7 +150,6 @@ void turnLR(){ //90 L
     md.setM2Speed(rpmToSpeedR(inputR + outputR));
   }
   md.setBrakes(400,400);
-  //delay(250);
 }
 
 void turnLH(){
@@ -216,7 +162,6 @@ void turnLH(){
     md.setM2Speed(rpmToSpeedR(inputR + outputR));
   }
   md.setBrakes(400,400);
-  //delay(250);
 }
 
 //CALIBRATION 
@@ -266,7 +211,6 @@ void startCal(){
   turnRR(); //face front
   delay(100);
   calibrationLRA(); //calibrate left wall
-  //delay(100);
 }
 
 void calibrationLRA(){
@@ -348,7 +292,6 @@ void calibrationLRD(){
   turnRR();
   delay(250);
   calibrationLRA();
-  //delay(250);
 }
 
 void calibrationFB(){
@@ -450,45 +393,24 @@ void calibrationFBS(){ //for the start
 
 // RPM STUFF
 double rpmToSpeedR(double rpm_r){
-  //double speedR = (rpm_r + 5.0856)/0.3123;
-  //double speedR = (rpm_r + 6.6807)/0.3116;
-  double speedR = (rpm_r + 9.5887)/0.433;
+  double speedR = (rpm_r + 6.6807)/0.3116;
   return speedR;
 }
 
-/*double speedToRPMR(double speedR){
-  //double rpmR = (0.3123 * speedR) - 5.0856;
-  double rpmR = (0.3116 * speedR) - 6.6807;
-  return rpmR;
-}*/
-
-
 double rpmToSpeedL(double rpm_l){
-  //double speedL = (rpm_l + 7.7982)/0.3087;
-  //double speedL = (rpm_l + 6.5911)/0.3113;
-  double speedL = (rpm_l + 11.194)/0.4212;
+  double speedL = (rpm_l + 6.5911)/0.3113;
   return speedL;
 }
 
-/*double speedToRPML(double speedL){
-  //double rpmL = (0.3087 * speedL) - 7.7982;
-  double rpmL = (0.3113 * speedL) - 6.5911;
-  return rpmL;
-}*/
-
 double calcRPMR(){
   double duration = pulseIn(11,HIGH);
-  //Serial.print("duration: "); Serial.println(duration);
   double rpmR = 36000000/562.25/duration;;
-  //Serial.print("rpmR: "); Serial.println(rpmR);
   return rpmR;
 }
 
 double calcRPML(){
   double duration = pulseIn(3,HIGH);
-  //Serial.print("duration: "); Serial.println(duration);
   double rpmL = 36000000/562.25/duration;;
-  //Serial.print("rpmL: "); Serial.println(rpmL);
   return rpmL;
 }
 
